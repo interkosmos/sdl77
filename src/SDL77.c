@@ -46,6 +46,10 @@ Uint8  *key_state = NULL;                       /* keyboard state array */
 Uint32 *palette   = NULL;                       /* custom palette array */
 Uint32 color      = 0;                          /* current pen colour (in screen surface format) */
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 int  gkey_(int *icode);
 long gticks_();
 long gtime_();
@@ -124,8 +128,8 @@ void galloc_(int *istat)
  */
 void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih)
 {
-    SDL_Rect src = { *ix1, *iy1, *iw, *ih };
-    SDL_Rect dst = { *ix2, *iy2, *iw, *ih };
+    SDL_Rect src = { (Sint16) *ix1, (Sint16) *iy1, (Uint16) *iw, (Uint16) *ih };
+    SDL_Rect dst = { (Sint16) *ix2, (Sint16) *iy2, (Uint16) *iw, (Uint16) *ih };
     SDL_BlitSurface(layers[layer], &src, layers[*i], &dst);
 }
 
@@ -223,7 +227,7 @@ void gfill_()
  */
 void gfillr_(int *ix, int *iy, int *iw, int *ih)
 {
-    SDL_Rect rect = { *ix, *iy, *iw, *ih };
+    SDL_Rect rect = { (Sint16) *ix, (Sint16) *iy, (Uint16) *iw, (Uint16) *ih };
     SDL_FillRect(layers[layer], &rect, color);
 }
 
@@ -538,3 +542,7 @@ void mplay_(int *loops)
 {
     Mix_PlayMusic(music, *loops);
 }
+
+#ifdef  __cplusplus
+}
+#endif
