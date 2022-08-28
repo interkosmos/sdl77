@@ -112,6 +112,7 @@ $ ./demo
 ## Further Examples
 Some example programs can be found in directory `examples/`:
 
+* **engine** renders a 3-D environment through ray-casting.
 * **fire** renders the DOOM fire effect.
 * **fizzle** demonstrates a fizzle-fade effect based on Fisher-Yates shuffle.
 * **font** prints text with a bitmap font.
