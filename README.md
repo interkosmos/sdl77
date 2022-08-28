@@ -1,0 +1,129 @@
+# SDL77
+SDL77 is a C library for game programming in FORTRAN 77 that provides
+some glue code to access the software renderer of SDL 1.2.
+
+The library has the following dependencies:
+
+* SDL 1.2
+* SDL_image
+* SDL_mixer
+
+You may have to install additional development headers.
+
+## Build Instructions
+On FreeBSD, first install the dependencies:
+
+```
+# pkg install audio/sdl_mixer devel/sdl12 graphics/sdl_image
+```
+
+Then, build `libSDL77.a` by executing the provided Makefile:
+
+```
+$ make
+```
+
+Link your FORTRAN 77 program against `libSDL77.a -lSDL -lSDL_image -lSDL_mixer`.
+
+## Example
+The following example program in FORTRAN 77 opens an SDL 1.2 window and
+fills a green rectangle to screen.
+
+```fortran
+C     ******************************************************************
+C
+C     SDL77 DEMO PROGRAM IN FORTRAN 77.
+C
+C     ******************************************************************
+      PROGRAM DEMO
+C
+C     IMPORTS.
+C
+      EXTERNAL GCLOSE, GOPEN
+      EXTERNAL GCOLOR, GDELAY, GEVENT, GFILLR, GFLUSH, GLAYER
+      INTEGER  GKEY
+C
+C     PARAMETERS.
+C
+      INTEGER IDELAY, IESC, IEQUIT, IW, IH
+      PARAMETER (IDELAY=50, IESC=27, IEQUIT=12, IW=640, IH=480)
+C
+C     VARIABLES.
+C
+      INTEGER IEVENT, ISTAT
+      LOGICAL DONE
+      DATA DONE /.FALSE./
+C
+C     OPEN SDL 1.2 WINDOW.
+C
+      CALL GOPEN(IW, IH, 'FORTRAN' // CHAR(0), ISTAT)
+      IF (ISTAT .NE. 0) STOP
+C
+C     MAIN LOOP: POLLS EVENTS, FILLS RECTANGLE, FLIPS BUFFER TO SCREEN.
+C
+   10 CONTINUE
+C
+C     PROCESS EVENTS.
+C
+   20 CONTINUE
+      CALL GEVENT(IEVENT, ISTAT)
+      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (ISTAT .EQ. 1) GOTO 20
+C
+C     PROCESS KEYBOARD INPUT.
+C
+      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+C
+C     FILL RECTANGLE.
+C
+      CALL GLAYER(0)
+      CALL GCOLOR(0, 255, 0)
+      CALL GFILLR(50, 50, 150, 150)
+C
+C     FLIP TO SCREEN.
+C
+      CALL GFLUSH()
+      CALL GDELAY(IDELAY)
+      IF (.NOT. DONE) GOTO 10
+C
+C     QUIT.
+C
+      CALL GCLOSE()
+      END
+```
+
+Link the demo program against SDL77, SDL, and SDL_mixer:
+
+```
+$ gfortran -o demo demo.f libSDL77.a -lSDL -lSDL_image -lSDL_mixer
+$ ./demo
+```
+
+The code is compatible to f2c as well:
+
+```
+$ f2c demo.f
+demo.f:
+   MAIN demo:
+$ gcc -o demo demo.c libSDL77.a -lSDL -lSDL_image -lSDL_mixer -lf2c -lm
+$ ./demo
+```
+
+## Further Examples
+Some example programs can be found in directory `examples/`:
+
+* **fire** renders the DOOM fire effect.
+* **fizzle** demonstrates a fizzle-fade effect based on Fisher-Yates shuffle.
+* **font** prints text with a bitmap font.
+* **mode7** shows affine transformation for perspective correction.
+* **shuttle** renders the wireframe model of a space shuttle.
+* **track** plays an audio track in OGG format.
+
+Build the examples with:
+
+```
+$ make examples
+```
+
+## Licence
+ISC
