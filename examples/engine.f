@@ -1,6 +1,6 @@
 C     ******************************************************************
 C
-C     3-D ENGINE
+C     2.5-D ENGINE
 C
 C     BASIC RAY-CASTING ENGINE.
 C
@@ -82,7 +82,7 @@ C
       INTEGER  GKEY
 
       INCLUDE 'const.fi'
-      REAL    ALPHA, SPEED
+      REAL ALPHA, SPEED
       PARAMETER (ALPHA=0.1, SPEED=0.15)
 
       INTEGER MAPY(MW, MH)

@@ -17,7 +17,7 @@ On FreeBSD, first install the dependencies:
 # pkg install audio/sdl_mixer devel/sdl12 graphics/sdl_image
 ```
 
-Then, build `libSDL77.a` by executing the provided Makefile:
+Then, build `libSDL77.a` with GCC by executing the provided Makefile:
 
 ```
 $ make
@@ -26,8 +26,8 @@ $ make
 Link your FORTRAN 77 program against `libSDL77.a -lSDL -lSDL_image -lSDL_mixer`.
 
 ## Example
-The following example program in FORTRAN 77 opens an SDL 1.2 window and
-fills a green rectangle to screen.
+The following example program `demo.f` in ANSI FORTRAN 77 opens an SDL
+1.2 window and fills a green rectangle.
 
 ```fortran
 C     ******************************************************************
@@ -37,7 +37,7 @@ C
 C     ******************************************************************
       PROGRAM DEMO
 C
-C     IMPORTS.
+C     EXTERNAL PROCEDURES.
 C
       EXTERNAL GCLOSE, GOPEN
       EXTERNAL GCOLOR, GDELAY, GEVENT, GFILLR, GFLUSH, GLAYER
@@ -112,7 +112,7 @@ $ ./demo
 ## Further Examples
 Some example programs can be found in directory `examples/`:
 
-* **engine** renders a 3-D environment through ray-casting.
+* **engine** renders a 2.5-D environment through ray-casting.
 * **fire** renders the DOOM fire effect.
 * **fizzle** demonstrates a fizzle-fade effect based on Fisher-Yates shuffle.
 * **font** prints text with a bitmap font.

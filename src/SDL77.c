@@ -141,6 +141,7 @@ void gclose_()
 
     if (palette) free(palette);
     if (music) Mix_FreeMusic(music);
+
     Mix_CloseAudio();
     Mix_Quit();
     SDL_Quit();
