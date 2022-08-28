@@ -160,8 +160,7 @@ void gcolor_(int *ir, int *ig, int *ib)
  */
 void gcppal_(int *ix, int *iy, int *i)
 {
-    Uint32 *pixels;
-    pixels = (Uint32 *) layers[layer]->pixels;
+    Uint32 *pixels = (Uint32 *) layers[layer]->pixels;
     pixels[(*iy * layers[layer]->w) + *ix] = palette[*i];
 }
 
@@ -171,11 +170,8 @@ void gcppal_(int *ix, int *iy, int *i)
  */
 void gcppix_(int *ix1, int *iy1, int *ix2, int *iy2)
 {
-    Uint32 *pixels, *scratch;
-
-    pixels = (Uint32 *) layers[layer]->pixels;
-    scratch = (Uint32 *) layers[0]->pixels;
-
+    Uint32 *pixels = (Uint32 *) layers[layer]->pixels;
+    Uint32 *scratch = (Uint32 *) layers[0]->pixels;
     scratch[(*iy2 * layers[0]->w) + *ix2] = pixels[(*iy1 * layers[layer]->w) + *ix1];
 }
 
@@ -263,10 +259,14 @@ void ghline_(int *ix1, int *ix2, int *iy)
     x1 = MIN(*ix1, *ix2);
     x2 = MAX(*ix1, *ix2);
 
+    glock_();
+
     for (int ix = x1; ix <= x2; ix++)
     {
         gpixel_(&ix, iy);
     }
+
+    gulock_();
 }
 
 /*
@@ -435,9 +435,7 @@ void gpal_(int *n)
  */
 void gpixel_(int *ix, int *iy)
 {
-    Uint32 *scratch;
-
-    scratch = (Uint32 *) layers[layer]->pixels;
+    Uint32 *scratch = (Uint32 *) layers[layer]->pixels;
     scratch[(*iy * layers[layer]->w) + *ix] = color;
 }
 
@@ -489,10 +487,14 @@ void gvline_(int *ix, int *iy1, int *iy2)
     y1 = MIN(*iy1, *iy2);
     y2 = MAX(*iy1, *iy2);
 
+    glock_();
+
     for (int iy = y1; iy <= y2; iy++)
     {
         gpixel_(ix, &iy);
     }
+
+    gulock_();
 }
 
 /*

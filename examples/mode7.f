@@ -25,7 +25,7 @@ C     ******************************************************************
       LOGICAL DONE
       DATA DONE /.FALSE./
 C
-C     OPEN SDL 1.2 WINDOW AND INITIALISE THE BITMAP FONT.
+C     OPEN SDL 1.2 WINDOW.
 C
       CALL INIT(IW, IH, ISTAT)
       IF (ISTAT .NE. 0) STOP
@@ -79,7 +79,7 @@ C
       CALL GCOLOR(127, 0, 255)
       CALL GFILL()
 C
-C     LOAD BACKGROUND IMAGE TO LAYER.
+C     LOAD TEXTURE TO LAYER.
 C
       CALL GLAYER(1)
       CALL GLOAD('share/mode7.png' // CHAR(0), ISTAT)

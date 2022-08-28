@@ -2,7 +2,8 @@ C     ******************************************************************
 C
 C     TRACK
 C
-C     EXAMPLE THAT PLAYS AN AUDIO TRACK WITH SDL_MIXER.
+C     EXAMPLE THAT PLAYS AN AUDIO TRACK WITH SDL_MIXER. THE OGG FILE
+C     MUST HAVE A SAMPLE RATE OF 22050 HZ.
 C
 C     DATE..: 2022-08-28
 C     AUTHOR: PHILIPP ENGEL
