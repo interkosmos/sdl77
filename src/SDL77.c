@@ -46,7 +46,7 @@ Uint8  *key_state = NULL;                       /* keyboard state array */
 Uint32 *palette   = NULL;                       /* custom palette array */
 Uint32 color      = 0;                          /* current pen colour (in screen surface format) */
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -543,6 +543,6 @@ void mplay_(int *loops)
     Mix_PlayMusic(music, *loops);
 }
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 }
 #endif

@@ -199,14 +199,14 @@ C     ******************************************************************
 C
 C     RENDERS THE SCENE.
 C
-      EXTERNAL GCOLOR, GFILL, GFILLR, GLAYER, RAYCST
+      EXTERNAL GCOLOR, GFILLR, GLAYER, RAYCST
       INCLUDE 'const.fi'
       INTEGER IX
 
       CALL GLAYER(0)
-      CALL GCOLOR(0, 0, 0)
-      CALL GFILL()
 
+      CALL GCOLOR(0, 0, 0)
+      CALL GFILLR(0, 0, IW, IH/2)
       CALL GCOLOR(31, 31, 31)
       CALL GFILLR(0, IH/2 - 1, IW, IH/2)
 

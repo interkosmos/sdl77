@@ -1,9 +1,11 @@
 # SDL77
-SDL77 is a C library for game programming in FORTRAN 77 that provides
+SDL77 is a C library for game development in FORTRAN 77 that provides
 some glue code to access the software renderer of SDL 1.2. Common
-[C/FORTRAN calling conventions](https://www.math.utah.edu/software/c-with-fortran.html)
+[FORTRAN/C calling conventions](https://www.math.utah.edu/software/c-with-fortran.html)
 are used for mixed-language programming (compatible to f77, f2c, g77,
-GNU Fortran, DEC/Compaq, Portland Group, SGI, Sun, …).
+GNU Fortran, DEC/Compaq, Portland Group, SGI, Sun, …). For modern
+Fortran 2008 interface bindings to SDL 2.0, see
+[fortran-sdl2](https://github.com/interkosmos/fortran-sdl2).
 
 The library has the following dependencies:
 
@@ -27,7 +29,8 @@ $ make
 ```
 
 Link your FORTRAN 77 program against `libSDL77.a -lSDL -lSDL_image -lSDL_mixer`.
-Instead of `libSDL77.a`, you can simply link with object file `SDL77.o`.
+Alternatively, you can simply link with object file `SDL77.o` instead of
+`libSDL77.a`.
 
 ## Example
 The following example program `demo.f` in ANSI FORTRAN 77 opens an SDL
@@ -117,6 +120,7 @@ $ ./demo
 Some example programs can be found in directory `examples/`:
 
 * **engine** renders a 2.5-D environment through ray-casting.
+* **fern** draws a Barnsley fern fractal.
 * **fire** renders the DOOM fire effect.
 * **fizzle** demonstrates a fizzle-fade effect based on Fisher-Yates shuffle.
 * **font** prints text with a bitmap font.

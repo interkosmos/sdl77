@@ -20,6 +20,7 @@ $(TARGET):
 
 examples: $(TARGET)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o engine examples/engine.f $(LDLIBS)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o fern examples/fern.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o fire examples/fire.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o fizzle examples/fizzle.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o font examples/font.f $(LDLIBS)
@@ -30,6 +31,7 @@ examples: $(TARGET)
 clean:
 	if [ -e $(TARGET) ]; then rm $(TARGET); fi
 	if [ -e engine ]; then rm engine; fi
+	if [ -e fern ]; then rm fern; fi
 	if [ -e fire ]; then rm fire; fi
 	if [ -e fizzle ]; then rm fizzle; fi
 	if [ -e font ]; then rm font; fi
