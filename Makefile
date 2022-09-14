@@ -25,6 +25,7 @@ examples: $(TARGET)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o fizzle examples/fizzle.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o font examples/font.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o mode7 examples/mode7.f $(LDLIBS)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o root3 examples/root3.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o shuttle examples/shuttle.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o track examples/track.f $(LDLIBS)
 
@@ -36,6 +37,7 @@ clean:
 	if [ -e fizzle ]; then rm fizzle; fi
 	if [ -e font ]; then rm font; fi
 	if [ -e mode7 ]; then rm mode7; fi
+	if [ -e root3 ]; then rm root3; fi
 	if [ -e shuttle ]; then rm shuttle; fi
 	if [ -e track ]; then rm track; fi
 	rm *.o

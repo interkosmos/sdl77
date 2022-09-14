@@ -23,7 +23,7 @@ C     ******************************************************************
 C
 C     OPEN SDL 1.2 WINDOW.
 C
-      CALL GOPEN(IW, IH, 'FORTRAN' // CHAR(0), ISTAT)
+      CALL GOPEN(IW, IH, 'FORTRAN' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) STOP
       CALL GCUR(0)
 C

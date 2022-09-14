@@ -29,12 +29,12 @@ C
 C
 C     OPEN WINDOW.
 C
-      CALL GOPEN(320, 200, 'Playing track.ogg ...' // CHAR(0), ISTAT)
+      CALL GOPEN(320, 200, 'Playing track.ogg ...' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) STOP 'ERROR: SDL FAILED'
 C
 C     PLAY TRACK INDEFINITELY.
 C
-      CALL MOPEN('share/track.ogg' // CHAR(0))
+      CALL MOPEN('share/track.ogg' // ACHAR(0))
       CALL MPLAY(-1)
 C
 C     MAIN LOOP.

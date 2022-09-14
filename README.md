@@ -63,7 +63,7 @@ C
 C
 C     OPEN SDL 1.2 WINDOW.
 C
-      CALL GOPEN(IW, IH, 'FORTRAN' // CHAR(0), ISTAT)
+      CALL GOPEN(IW, IH, 'FORTRAN' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) STOP
 C
 C     MAIN LOOP: POLLS EVENTS, FILLS RECTANGLE, FLIPS BUFFER TO SCREEN.
@@ -125,6 +125,7 @@ Some example programs can be found in directory `examples/`:
 * **fizzle** demonstrates a fizzle-fade effect based on Fisher-Yates shuffle.
 * **font** prints text with a bitmap font.
 * **mode7** shows affine transformation for perspective correction.
+* **root3** is another fractal demo.
 * **shuttle** renders the wireframe model of a space shuttle.
 * **track** plays an audio track in OGG format.
 

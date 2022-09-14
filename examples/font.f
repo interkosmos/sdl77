@@ -82,7 +82,7 @@ C
       INTEGER IW, IH, IMGW, IMGH, ISTAT
       INTEGER I, J, IX, IY
 
-      CALL GOPEN(IW, IH, 'FORTRAN' // CHAR(0), ISTAT)
+      CALL GOPEN(IW, IH, 'FORTRAN' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) RETURN
 C
 C     CREATE BUFFER LAYER.
@@ -95,13 +95,13 @@ C
 C     LOAD BACKGROUND IMAGE TO LAYER.
 C
       CALL GLAYER(2)
-      CALL GLOAD('share/back.png' // CHAR(0), ISTAT)
+      CALL GLOAD('share/back.png' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) RETURN
 C
 C     LOAD FONT IMAGE TO LAYER AND INITIALISE BITMAP FONT.
 C
       CALL GLAYER(3)
-      CALL GLOAD('share/font.png' // CHAR(0), ISTAT)
+      CALL GLOAD('share/font.png' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) RETURN
       CALL FINIT(3, 12, 24, 32)
 C

@@ -73,7 +73,7 @@ C
 C
 C     OPEN WINDOW AND FILL SCREEN LAYER.
 C
-      CALL GOPEN(IW, IH, 'FORTRAN' // CHAR(0), ISTAT)
+      CALL GOPEN(IW, IH, 'FORTRAN' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) RETURN
       CALL GLAYER(0)
       CALL GCOLOR(127, 0, 255)
@@ -82,7 +82,7 @@ C
 C     LOAD TEXTURE TO LAYER.
 C
       CALL GLAYER(1)
-      CALL GLOAD('share/mode7.png' // CHAR(0), ISTAT)
+      CALL GLOAD('share/mode7.png' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) RETURN
       END
 C     ******************************************************************

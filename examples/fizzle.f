@@ -28,7 +28,7 @@ C     ******************************************************************
 C
 C     OPEN WINDOW, HIDE CURSOR, INITIALISE FIZZLE FADE.
 C
-      CALL GOPEN(IW, IH, 'FORTRAN' // CHAR(0), ISTAT)
+      CALL GOPEN(IW, IH, 'FORTRAN' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) STOP
       CALL GCUR(0)
       CALL ZINIT(255, 0, 0)
