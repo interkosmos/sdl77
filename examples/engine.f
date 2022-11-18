@@ -13,6 +13,8 @@ C     ******************************************************************
       INTEGER  GKEY, GTICKS
 
       INCLUDE 'const.fi'
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
       INTEGER MAXFPS
       REAL    FT
       PARAMETER (MAXFPS=30, FT=1.0/MAXFPS*1000)
@@ -82,6 +84,7 @@ C
       INTEGER  GKEY
 
       INCLUDE 'const.fi'
+      INCLUDE 'key.fi'
       REAL ALPHA, SPEED
       PARAMETER (ALPHA=0.1, SPEED=0.15)
 
@@ -229,15 +232,19 @@ C
 C     ******************************************************************
       BLOCK DATA
 C
-C     COMMON VARIABLES (PLAYER, MAP, COLOUR PALETTE).
+C     COMMON DATA:
+C
+C     PALET - RGB COLOUR PALETTE.
+C     STATE - GAME STATE (VECTORS).
+C     WORLD - MAP DATA.
 C
       INCLUDE 'const.fi'
       INTEGER IRY(16), IGY(16), IBY(16), MAPY(MW, MH)
       REAL    DX, DY, PLANEX, PLANEY, POSX, POSY
 
       COMMON /PALET/ IRY, IGY, IBY
-      COMMON /WORLD/ MAPY
       COMMON /STATE/ DX, DY, PLANEX, PLANEY, POSX, POSY
+      COMMON /WORLD/ MAPY
 
       DATA DX, DY, PLANEX, PLANEY, POSX, POSY
      &/-1.0,0.0,0.0,0.66,10.5,10.5/

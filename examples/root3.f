@@ -14,8 +14,10 @@ C     ******************************************************************
       EXTERNAL GCLOSE, GDELAY, GEVENT, GFLUSH, GOPEN
       INTEGER  GKEY
 
-      INTEGER IDELAY, IESC, IEQUIT, IW, IH
-      PARAMETER (IDELAY=100, IESC=27, IEQUIT=12, IW=1024, IH=768)
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
+      INTEGER IDELAY, IW, IH
+      PARAMETER (IDELAY=100, IW=1024, IH=768)
 
       INTEGER IEVENT, ISTAT
       LOGICAL DONE

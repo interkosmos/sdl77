@@ -14,9 +14,11 @@ C     ******************************************************************
       EXTERNAL GCLOSE, GCUR, GEVENT, GFLUSH
       INTEGER  GKEY, GTICKS
 
-      INTEGER IESC, IEQUIT, MAXFPS
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
+      INTEGER MAXFPS
       REAL    FT
-      PARAMETER (IESC=27, IEQUIT=12, MAXFPS=15, FT=1.0/MAXFPS*1000)
+      PARAMETER (MAXFPS=15, FT=1.0/MAXFPS*1000)
 
       INTEGER IW, IH
       COMMON /WINDOW/ IW, IH

@@ -17,6 +17,8 @@ C     ******************************************************************
       LOGICAL  ZNEXT
 
       INCLUDE 'const.fi'
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
       INTEGER IDELAY
       PARAMETER (IDELAY=50)
 

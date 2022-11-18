@@ -15,6 +15,8 @@ C     ******************************************************************
       INTEGER  GKEY, GTIME
 
       INCLUDE 'const.fi'
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
       INTEGER IDELAY, N
       REAL    SCALE
       PARAMETER (IDELAY=100, N=100000, SCALE=50.0)

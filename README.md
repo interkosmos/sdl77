@@ -28,6 +28,25 @@ Then, build `libSDL77.a` with GCC by executing the provided Makefile:
 $ make
 ```
 
+You may want to compile the library without the SDL_image dependency
+(restricting the supported image formats to BMP only):
+
+```
+$ make noimage
+```
+
+To build without SDL_mixer, run:
+
+```
+$ make nomixer
+```
+
+And only bare SDL 1.2, without SDL_image and SDL_mixer:
+
+```
+$ make nolibs
+```
+
 Link your FORTRAN 77 program against `libSDL77.a -lSDL -lSDL_image -lSDL_mixer`.
 Alternatively, you can simply link with object file `SDL77.o` instead of
 `libSDL77.a`.
@@ -127,6 +146,7 @@ Some example programs can be found in directory `examples/`:
 * **mode7** shows affine transformation for perspective correction.
 * **root3** is another fractal demo.
 * **shuttle** renders the wireframe model of a space shuttle.
+* **smoke** renders a 3-D chaotic attractor.
 * **track** plays an audio track in OGG format.
 
 Build the examples with:

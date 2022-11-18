@@ -14,9 +14,11 @@ C     ******************************************************************
       EXTERNAL GLINE, GOPEN
       INTEGER  GKEY, GTIME
 
-      INTEGER IDELAY, IEQUIT, IESC, IW, IH, NEDGES, NVERTS
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
+      INTEGER IDELAY, IW, IH, NEDGES, NVERTS
       REAL    ALPHA, D, F, PI2
-      PARAMETER (IDELAY=20, IEQUIT=12, IESC=27, IW=640, IH=480)
+      PARAMETER (IDELAY=20, IW=640, IH=480)
       PARAMETER (NEDGES=259, NVERTS=124)
       PARAMETER (ALPHA=0.01, D=120.0, F=0.2, PI2=ACOS(-1.0)*2)
 

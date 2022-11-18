@@ -18,6 +18,8 @@ C     ******************************************************************
       INTEGER  GKEY, GTICKS
 
       INCLUDE 'const.fi'
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
       INTEGER IMGW, IMGH, MAXFPS
       REAL    FT
       PARAMETER (IMGW=100, IMGH=100, MAXFPS=30, FT=1.0/MAXFPS*1000)

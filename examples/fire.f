@@ -19,6 +19,8 @@ C
 C     PARAMETERS.
 C
       INCLUDE 'const.fi'
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
       INTEGER MAXFPS
       REAL    FT
       PARAMETER (MAXFPS=30, FT=1.0/MAXFPS*1000)

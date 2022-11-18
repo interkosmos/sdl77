@@ -15,18 +15,29 @@
  *
  * $ gfortran `sdl-config --cflags` -o demo demo.f libSDL77.a
  *   `sdl-config --libs` -lSDL_image -lSDL_mixer
+ *
+ * Pass NO_IMAGE and/or NO_MIXER to build without external libraries:
+ *
+ * $ gcc -DNO_IMAGE -DNO_MIXER `sdl-config --cflags` -c SDL77.c
+ *
  */
 
 #include <time.h>
-
 #include "SDL.h"
+
+#ifndef NO_IMAGE
 #include "SDL_image.h"
+#endif
+
+#ifndef NO_MIXER
 #include "SDL_mixer.h"
 
 #define AUDIO_FREQ     MIX_DEFAULT_FREQUENCY    /* 22050 Hz */
 #define AUDIO_FORMAT   MIX_DEFAULT_FORMAT       /* AUDIO_S16SYS by default */
 #define AUDIO_CHANNELS MIX_DEFAULT_CHANNELS     /* mono or stereo */
 #define AUDIO_CHUNK    4096                     /* audio chunk size in bytes */
+#endif
+
 #define NLAYERS        8                        /* max. number of layer surfaces */
 #define SCREEN_BPP     32                       /* colour depth (32 bit) */
 #define SDL_FLAG       SDL_SWSURFACE            /* SDL surface flag: use software rendering by default */
@@ -36,7 +47,10 @@
 
 SDL_Event   event;                              /* last event */
 SDL_Surface *layers[NLAYERS] = { NULL };        /* layer surfaces */
-Mix_Music   *music           = NULL;            /* SDL_mixer handle */
+
+#ifndef NO_MIXER
+Mix_Music *music  = NULL;                       /* SDL_mixer handle */
+#endif
 
 int layer         = 0;                          /* currently selected layer (0 is screen layer) */
 int screen_width  = 0;                          /* window width */
@@ -83,10 +97,12 @@ void gvideo_(int *ihw, int *iwm, long long *ivm);
 void gvline_(int *ix, int *iy1, int *iy2);
 void gwarp_(int *ix, int *iy);
 
+#ifndef NO_MIXER
 void mclose_();
 void mhalt_();
 void mopen_(const char *file);
 void mplay_(int *loops);
+#endif
 
 /*
  * Returns 1 if key of given code has been pressed, else 0.
@@ -144,10 +160,13 @@ void gclose_()
     }
 
     if (palette) free(palette);
-    if (music) Mix_FreeMusic(music);
 
+#ifndef NO_MIXER
+    if (music) Mix_FreeMusic(music);
     Mix_CloseAudio();
     Mix_Quit();
+#endif
+
     SDL_Quit();
 }
 
@@ -291,11 +310,24 @@ void gload_(const char *file, int *istat)
 
     *istat = -1;
     if (layer <= 0) return;
+
+#ifdef NO_IMAGE
+
+    image = SDL_LoadBMP(file);
+    if (!image) return;
+    if (layers[layer]) SDL_FreeSurface(layers[layer]);
+    layers[layer] = image;
+
+#else
+
     image = IMG_Load(file);
     if (!image) return;
     if (layers[layer]) SDL_FreeSurface(layers[layer]);
     layers[layer] = SDL_DisplayFormatAlpha(image);
     SDL_FreeSurface(image);
+
+#endif
+
     if (!layers[layer]) return;
     *istat = 0;
 }
@@ -408,10 +440,16 @@ void gopen_(int *iw, int *ih, const char *title, int *istat)
     *istat = -1;
 
     if (SDL_WasInit(SDL_INIT_VIDEO) != 0) return;
+
+#ifndef NO_MIXER
     if (Mix_Init(MIX_INIT_OGG) == -1) return;
+#endif
 
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) == -1) return;
+
+#ifndef NO_MIXER
     if (Mix_OpenAudio(AUDIO_FREQ, AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_CHUNK) == -1) return;
+#endif
 
     screen_width = *iw;
     screen_height = *ih;
@@ -510,6 +548,7 @@ void gwarp_(int *ix, int *iy)
     SDL_WarpMouse((Uint16) *ix, (Uint16) *iy);
 }
 
+#ifndef NO_MIXER
 /*
  * Closes audio file.
  */
@@ -542,6 +581,7 @@ void mplay_(int *loops)
 {
     Mix_PlayMusic(music, *loops);
 }
+#endif
 
 #ifdef __cplusplus
 }

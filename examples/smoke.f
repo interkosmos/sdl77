@@ -1,0 +1,112 @@
+C     ******************************************************************
+C
+C     SMOKE
+C
+C     RENDERS A 3-D CHAOTIC ATTRACTOR.
+C
+C     DATE..: 2022-11-18
+C     AUTHOR: PHILIPP ENGEL
+C
+C     ******************************************************************
+      PROGRAM SMOKE
+      EXTERNAL GCLOSE, GDELAY, GEVENT, GFLUSH, GOPEN
+      EXTERNAL RENDER
+      INTEGER  GKEY
+
+      INCLUDE 'event.fi'
+      INCLUDE 'key.fi'
+      INTEGER IDELAY
+      PARAMETER (IDELAY=100)
+
+      INTEGER IEVENT, ISTAT
+      LOGICAL DONE
+      DATA DONE /.FALSE./
+C
+C     OPEN SDL 1.2 WINDOW.
+C
+      CALL GOPEN(800, 800, 'FORTRAN' // ACHAR(0), ISTAT)
+      IF (ISTAT .NE. 0) STOP
+C
+C     RENDER THE SCENE.
+C
+      CALL RENDER()
+C
+C     MAIN LOOP. CHECKS INPUT AND COPIES SCREEN LAYER TO SCREEN.
+C
+   10 CONTINUE
+   20 CONTINUE
+      CALL GEVENT(IEVENT, ISTAT)
+      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (ISTAT .EQ. 1) GOTO 20
+      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      CALL GFLUSH()
+      CALL GDELAY(IDELAY)
+      IF (.NOT. DONE) GOTO 10
+C
+C     CLEAN UP AND QUIT.
+C
+      CALL GCLOSE()
+      END
+C     ******************************************************************
+      SUBROUTINE RENDER()
+C
+C     CREATES AN IMAGE OF A 3-D CHAOTIC ATTRACTOR. FROM A PAPER BY
+C     CLIFFORD PICKOVER CALLED "A NOTE ON RENDERING 3-D STRANGE
+C     ATTRACTORS" FROM COMPUTERS AND GRAPHICS VOL 12, NO 2. PP. 263-267,
+C     1988.
+C
+C     BASED ON THE C VERSION "SMOKE.C" BY PAUL HAEBERLI FROM 1990,
+C     PUBLISHED ON THE ACCOMPANYING CD-ROM OF THE 1995 JAPANESE BOOK
+C     "INDY! SUPER POWER GUIDEBOOK" FOR SGI IRIX (ORIGINALLY FROM THE
+C     SGI FTP SERVER).
+C
+      EXTERNAL GCOLOR, GLAYER, GLOCK, GPIXEL, GULOCK
+
+      INTEGER ISIZE, N, NITER
+      REAL    A, B, C, D, E
+      REAL    XXMAX, XXMIN, YYMAX, YYMIN, XINC, YINC
+      PARAMETER (ISIZE=800, N=ISIZE*ISIZE, NITER=10*ISIZE*ISIZE)
+      PARAMETER (A=2.24, B=0.43, C=-0.65, D=-2.43, E=1.00)
+      PARAMETER (XXMAX=2.0, XXMIN=-2.0, YYMAX=2.0, YYMIN=-2.0)
+      PARAMETER (XINC=ISIZE/(XXMAX-XXMIN), YINC=ISIZE/(YYMAX-YYMIN))
+
+      INTEGER IBUFFY(ISIZE, ISIZE)
+      INTEGER I, J, K
+      INTEGER IX, IY
+      REAL    X, Y, Z, XX, YY, ZZ
+
+      DATA X, Y, Z /0,0,0/
+      DATA IBUFFY  /N * 0/
+
+      DO 10 I = 1, NITER
+      XX = SIN(A * Y) - Z * COS(B * X)
+      YY = Z * SIN(C * X) - COS(D * Y)
+      ZZ = E * SIN(X)
+      X = XX
+      Y = YY
+      Z = ZZ
+      IX = 1 + INT((XX - XXMIN) * XINC)
+      IY = 1 + INT((YY - YYMIN) * YINC)
+
+      IF (IX .GT. 0 .AND. IX .LT. ISIZE .AND.
+     &    IY .GT. 0 .AND. IY .LT. ISIZE) THEN
+        K = IBUFFY(IX, IY)
+        IF (K .LT. 255) IBUFFY(IX, IY) = K + 1
+      END IF
+   10 CONTINUE
+C
+C     DRAW PIXELS TO SCREEN LAYER.
+C
+      CALL GLAYER(0)
+      CALL GLOCK()
+
+      DO 20 I = 1, ISIZE
+      DO 30 J = 1, ISIZE
+      K = IBUFFY(I, J)
+      CALL GCOLOR(K, K, K)
+      CALL GPIXEL(I - 1, J - 1)
+   30 CONTINUE
+   20 CONTINUE
+
+      CALL GULOCK()
+      END
