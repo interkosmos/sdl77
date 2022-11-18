@@ -4,7 +4,7 @@ CC      = gcc
 FC      = gfortran
 AR      = ar
 CFLAGS  = -O2 -ffast-math -march=native -Wall -fpic
-FFLAGS  = -O2 -ffast-math -march=native -Wall -std=legacy -fimplicit-none
+FFLAGS  = -O2 -ffast-math -march=native -Wall -std=legacy -fimplicit-none -fmax-errors=1
 AFLAGS  = rcs
 LDFLAGS = `sdl-config --cflags`
 TARGET  = libSDL77.a
@@ -28,6 +28,7 @@ examples: $(TARGET)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o root3 examples/root3.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o shuttle examples/shuttle.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o smoke examples/smoke.f $(LDLIBS)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o sphere examples/sphere.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o track examples/track.f $(LDLIBS)
 
 noimage:
@@ -53,5 +54,6 @@ clean:
 	if [ -e root3 ]; then rm root3; fi
 	if [ -e shuttle ]; then rm shuttle; fi
 	if [ -e smoke ]; then rm smoke; fi
+	if [ -e sphere ]; then rm sphere; fi
 	if [ -e track ]; then rm track; fi
 	rm *.o

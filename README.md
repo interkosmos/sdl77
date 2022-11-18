@@ -147,6 +147,7 @@ Some example programs can be found in directory `examples/`:
 * **root3** is another fractal demo.
 * **shuttle** renders the wireframe model of a space shuttle.
 * **smoke** renders a 3-D chaotic attractor.
+* **sphere** draws a shaded sphere.
 * **track** plays an audio track in OGG format.
 
 Build the examples with:
