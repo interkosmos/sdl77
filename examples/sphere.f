@@ -72,7 +72,7 @@ C
       REAL V(3)
       REAL X
 
-      X = 1 / SQRT(DOT(V, V))
+      X = 1.0 / SQRT(DOT(V, V))
       V(1) = V(1) * X
       V(2) = V(2) * X
       V(3) = V(3) * X
@@ -84,12 +84,12 @@ C     DRAWS THE SPHERE.
 C
 C     ARGUMENTS:
 C
-C       IW      -   SCREEN WIDTH.
-C       IH      -   SCREEN HEIGHT.
-C       IR      -   SPHERE RADIUS.
-C       K       -   SPOT LIGHT.
-C       AMB     -   REFLECTIVE LIGHT (AMBIENT).
-C       DIR     -   LIGHT DIRECTION.
+C     IW    -   SCREEN WIDTH.
+C     IH    -   SCREEN HEIGHT.
+C     IR    -   SPHERE RADIUS.
+C     K     -   SPOT LIGHT.
+C     AMB   -   REFLECTIVE LIGHT (AMBIENT).
+C     DIR   -   LIGHT DIRECTION.
 C
       EXTERNAL GCOLOR, GLAYER, GLOCK, GPIXEL, GULOCK
       EXTERNAL NORM
@@ -110,17 +110,16 @@ C
       DO 10 IX = -IR, IR
       DO 20 IY = -IR, IR
       IZ = IR**2 - IX**2 - IY**2
-      IF (IZ .GE. 0) THEN
-        VEC(1) = REAL(IX)
-        VEC(2) = REAL(IY)
-        VEC(3) = SQRT(REAL(IZ))
-        CALL NORM(VEC)
-        S = MAX(0.0, DOT(DIR, VEC))
-        LUM = NINT(255 * (S**K + AMB) / (1 + AMB))
-        LUM = MAX(0, MIN(LUM, 255))
-        CALL GCOLOR(LUM, LUM, LUM)
-        CALL GPIXEL(IW2 + IX, IH2 + IY)
-      END IF
+      IF (IZ .LT. 0) GOTO 20
+      VEC(1) = REAL(IX)
+      VEC(2) = REAL(IY)
+      VEC(3) = SQRT(REAL(IZ))
+      CALL NORM(VEC)
+      S = MAX(0.0, DOT(DIR, VEC))
+      LUM = NINT(255 * (S**K + AMB) / (1 + AMB))
+      LUM = MAX(0, MIN(LUM, 255))
+      CALL GCOLOR(LUM, LUM, LUM)
+      CALL GPIXEL(IW2 + IX, IH2 + IY)
    20 CONTINUE
    10 CONTINUE
 

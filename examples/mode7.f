@@ -134,9 +134,8 @@ C     ******************************************************************
 C
 C     UPDATES VIEW POINT.
 C
-      INTEGER IDOWN, ILEFT, IRIGHT, IUP
-      REAL    DY, DA
-      PARAMETER (IDOWN=274, ILEFT=276, IRIGHT=275, IUP=273)
+      INCLUDE 'key.fi'
+      REAL DY, DA
       PARAMETER (DY=1.5, DA=0.05)
       INTEGER GKEY
 

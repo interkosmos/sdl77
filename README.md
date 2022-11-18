@@ -138,6 +138,7 @@ $ ./demo
 ## Further Examples
 Some example programs can be found in directory `examples/`:
 
+* **bship** draws burning ship fractal.
 * **engine** renders a 2.5-D environment through ray-casting.
 * **fern** draws a Barnsley fern fractal.
 * **fire** renders the DOOM fire effect.
