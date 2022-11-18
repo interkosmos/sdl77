@@ -15,8 +15,8 @@ C     ******************************************************************
 
       INCLUDE 'event.fi'
       INCLUDE 'key.fi'
-      INTEGER IDELAY
-      PARAMETER (IDELAY=100)
+      INTEGER IDELAY, ISIZE
+      PARAMETER (IDELAY=100, ISIZE=800)
 
       INTEGER IEVENT, ISTAT
       LOGICAL DONE
@@ -24,7 +24,7 @@ C     ******************************************************************
 C
 C     OPEN SDL 1.2 WINDOW.
 C
-      CALL GOPEN(800, 800, 'FORTRAN' // ACHAR(0), ISTAT)
+      CALL GOPEN(ISIZE, ISIZE, 'FORTRAN' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) STOP
 C
 C     RENDER THE SCENE.
@@ -65,7 +65,7 @@ C
       INTEGER ISIZE, N, NITER
       REAL    A, B, C, D, E
       REAL    XXMAX, XXMIN, YYMAX, YYMIN, XINC, YINC
-      PARAMETER (ISIZE=800, N=ISIZE*ISIZE, NITER=10*ISIZE*ISIZE)
+      PARAMETER (ISIZE=800, N=ISIZE*ISIZE, NITER=20*ISIZE*ISIZE)
       PARAMETER (A=2.24, B=0.43, C=-0.65, D=-2.43, E=1.00)
       PARAMETER (XXMAX=2.0, XXMIN=-2.0, YYMAX=2.0, YYMIN=-2.0)
       PARAMETER (XINC=ISIZE/(XXMAX-XXMIN), YINC=ISIZE/(YYMAX-YYMIN))
@@ -88,8 +88,8 @@ C
       IX = 1 + INT((XX - XXMIN) * XINC)
       IY = 1 + INT((YY - YYMIN) * YINC)
 
-      IF (IX .GT. 0 .AND. IX .LT. ISIZE .AND.
-     &    IY .GT. 0 .AND. IY .LT. ISIZE) THEN
+      IF (IX .GT. 0 .AND. IX .LE. ISIZE .AND.
+     &    IY .GT. 0 .AND. IY .LE. ISIZE) THEN
         K = IBUFFY(IX, IY)
         IF (K .LT. 255) IBUFFY(IX, IY) = K + 1
       END IF
