@@ -11,10 +11,11 @@ C     AUTHOR: PHILIPP ENGEL
 C
 C     ******************************************************************
       PROGRAM DEMO
-      EXTERNAL GCLOSE, GCUR, GDELAY, GEVENT, GFILL, GFLUSH, GOPEN
-      EXTERNAL ZINIT
-      INTEGER  GKEY, GTIME
-      LOGICAL  ZNEXT
+      EXTERNAL  GCLOSE, GCUR, GDELAY, GEVENT, GFILL, GFLUSH, GOPEN
+      EXTERNAL  ZINIT
+      INTEGER   GKEY
+      INTEGER*8 GTIME
+      LOGICAL   ZNEXT
 
       INCLUDE 'const.fi'
       INCLUDE 'event.fi'
@@ -26,7 +27,7 @@ C     ******************************************************************
       LOGICAL DONE, NEXT
       DATA DONE, NEXT /.FALSE.,.TRUE./
 
-      CALL SRAND(GTIME())
+      CALL SRAND(INT(GTIME() - (2**30 - 1)))
 C
 C     OPEN WINDOW, HIDE CURSOR, INITIALISE FIZZLE FADE.
 C
@@ -40,9 +41,9 @@ C
    10 CONTINUE
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
 
       IF (NEXT) THEN
         NEXT = ZNEXT()

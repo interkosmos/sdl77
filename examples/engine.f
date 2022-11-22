@@ -9,8 +9,9 @@ C     AUTHOR: PHILIPP ENGEL
 C
 C     ******************************************************************
       PROGRAM ENGINE
-      EXTERNAL GCLOSE, GCUR, GDELAY, GEVENT, GFLUSH, GOPEN
-      INTEGER  GKEY, GTICKS
+      EXTERNAL  GCLOSE, GCUR, GDELAY, GEVENT, GFLUSH, GOPEN
+      INTEGER   GKEY
+      INTEGER*8 GTICKS
 
       INCLUDE 'const.fi'
       INCLUDE 'event.fi'
@@ -19,8 +20,9 @@ C     ******************************************************************
       REAL    FT
       PARAMETER (MAXFPS=30, FT=1.0/MAXFPS*1000)
 
-      INTEGER IDELAY, IDT, IEVENT, ISTAT, IT
-      LOGICAL DONE
+      INTEGER   IDELAY, IDT, IEVENT, ISTAT
+      INTEGER*8 IT
+      LOGICAL   DONE
       DATA DONE /.FALSE./
 C
 C     OPEN SDL 1.2 WINDOW.
@@ -35,15 +37,15 @@ C
       IT = GTICKS()
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
 
       CALL UPDATE()
       CALL RENDER()
       CALL GFLUSH()
 
-      IDT = GTICKS() - IT
+      IDT = INT(GTICKS() - IT)
       IDELAY = MAX(0, INT(FT - IDT))
       IF (IDELAY .GT. 0) CALL GDELAY(IDELAY)
       IF (.NOT. DONE) GOTO 10
@@ -93,17 +95,17 @@ C
       COMMON /WORLD/ MAPY
       COMMON /STATE/ DX, DY, PLANEX, PLANEY, POSX, POSY
 
-      IF (GKEY(IUP) .EQ. 1) THEN
+      IF (GKEY(KUP) .EQ. 1) THEN
 C       MOVE FORWARD.
         CALL MOVE(SPEED)
-      ELSE IF (GKEY(IDOWN) .EQ. 1) THEN
+      ELSE IF (GKEY(KDOWN) .EQ. 1) THEN
 C       MOVE BACKWARD.
         CALL MOVE(-SPEED)
-      ELSE IF (GKEY(ILEFT) .EQ. 1) THEN
+      ELSE IF (GKEY(KLEFT) .EQ. 1) THEN
 C       TURN LEFT.
         CALL ROTATE(DX, DY, ALPHA)
         CALL ROTATE(PLANEX, PLANEY, ALPHA)
-      ELSE IF (GKEY(IRIGHT) .EQ. 1) THEN
+      ELSE IF (GKEY(KRIGHT) .EQ. 1) THEN
 C       TURN RIGHT.
         CALL ROTATE(DX, DY, -ALPHA)
         CALL ROTATE(PLANEX, PLANEY, -ALPHA)

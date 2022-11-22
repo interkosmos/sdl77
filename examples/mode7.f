@@ -10,21 +10,23 @@ C     AUTHOR: PHILIPP ENGEL
 C
 C     ******************************************************************
       PROGRAM MODE7
-      EXTERNAL INIT, RENDER, UPDATE
-      EXTERNAL GCLOSE, GCUR, GEVENT, GFLUSH
-      INTEGER  GKEY, GTICKS
+      EXTERNAL  INIT, RENDER, UPDATE
+      EXTERNAL  GCLOSE, GCUR, GEVENT, GFLUSH
+      INTEGER   GKEY
+      INTEGER*8 GTICKS
 
       INCLUDE 'event.fi'
       INCLUDE 'key.fi'
-      INTEGER MAXFPS
-      REAL    FT
-      PARAMETER (MAXFPS=15, FT=1.0/MAXFPS*1000)
+      INTEGER          MAXFPS
+      DOUBLE PRECISION FT
+      PARAMETER (MAXFPS=15, FT=1.0D0/MAXFPS*1000)
 
       INTEGER IW, IH
       COMMON /WINDOW/ IW, IH
 
-      INTEGER IDELAY, IDT, IEVENT, ISTAT, IT
-      LOGICAL DONE
+      INTEGER   IDELAY, IDT, IEVENT, ISTAT
+      INTEGER*8 IT
+      LOGICAL   DONE
       DATA DONE /.FALSE./
 C
 C     OPEN SDL 1.2 WINDOW.
@@ -39,15 +41,15 @@ C
       IT = GTICKS()
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
 
       CALL UPDATE()
       CALL RENDER()
       CALL GFLUSH()
 
-      IDT = GTICKS() - IT
+      IDT = INT(GTICKS() - IT)
       IDELAY = MAX(0, INT(FT - IDT))
       IF (IDELAY .GT. 0) CALL GDELAY(IDELAY)
       IF (.NOT. DONE) GOTO 10
@@ -142,10 +144,10 @@ C
       REAL ALPHA, X, Y
       COMMON /VIEW/ X, Y, ALPHA
 
-      IF (GKEY(IDOWN)  .EQ. 1) Y = Y - DY
-      IF (GKEY(IUP)    .EQ. 1) Y = Y + DY
-      IF (GKEY(IRIGHT) .EQ. 1) ALPHA = ALPHA - DA
-      IF (GKEY(ILEFT)  .EQ. 1) ALPHA = ALPHA + DA
+      IF (GKEY(KDOWN)  .EQ. 1) Y = Y - DY
+      IF (GKEY(KUP)    .EQ. 1) Y = Y + DY
+      IF (GKEY(KRIGHT) .EQ. 1) ALPHA = ALPHA - DA
+      IF (GKEY(KLEFT)  .EQ. 1) ALPHA = ALPHA + DA
       END
 C     ******************************************************************
       BLOCK DATA

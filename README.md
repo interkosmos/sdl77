@@ -13,7 +13,8 @@ The library has the following dependencies:
 * SDL_image
 * SDL_mixer
 
-You may have to install additional development headers.
+You may have to install additional development headers. See the
+[documentation](DOCUMENTATION.md) for the API description.
 
 ## Build Instructions
 On FreeBSD, first install the dependencies:
@@ -138,7 +139,7 @@ $ ./demo
 ## Further Examples
 Some example programs can be found in directory `examples/`:
 
-* **bship** draws burning ship fractal.
+* **bship** draws the burning ship fractal.
 * **engine** renders a 2.5-D environment through ray-casting.
 * **fern** draws a Barnsley fern fractal.
 * **fire** renders the DOOM fire effect.

@@ -19,7 +19,6 @@
  * Pass NO_IMAGE and/or NO_MIXER to build without external libraries:
  *
  * $ gcc -DNO_IMAGE -DNO_MIXER `sdl-config --cflags` -c SDL77.c
- *
  */
 
 #include <time.h>
@@ -84,6 +83,7 @@ void gflush_();
 void ggrab_(int *itoggle);
 void ghline_(int *ix1, int *ix2, int *iy);
 void glayer_(int *layer);
+void gline_(int *ix1, int *iy1, int *ix2, int *iy2);
 void gload_(const char *file, int *istat);
 void glock_();
 void gmouse_(long *ixrel, long *iyrel);
@@ -200,20 +200,20 @@ void gcppix_(int *ix1, int *iy1, int *ix2, int *iy2)
 }
 
 /*
- * Shows or hides the mouse cursor.
- */
-void gcur_(int *itoggle)
-{
-    SDL_ShowCursor(*itoggle);
-}
-
-/*
  * Creates a new layer. Replaces existing layer.
  */
 void gcreat_(int *iw, int *ih)
 {
     if (layers[layer]) SDL_FreeSurface(layers[layer]);
     layers[layer] = SDL_CreateRGBSurface(SDL_FLAG, *iw, *ih, 32, 0, 0, 0, 0);
+}
+
+/*
+ * Shows or hides the mouse cursor.
+ */
+void gcur_(int *itoggle)
+{
+    SDL_ShowCursor(*itoggle);
 }
 
 /*
@@ -234,7 +234,7 @@ void gevent_(int *ievent, int *istat)
 }
 
 /*
- * Fills screen surface in current colour.
+ * Fills current layer surface in global colour.
  */
 void gfill_()
 {
@@ -242,7 +242,7 @@ void gfill_()
 }
 
 /*
- * Fills rectangle on screen surface in current colour.
+ * Fills rectangle on current layer surface in global colour.
  */
 void gfillr_(int *ix, int *iy, int *iw, int *ih)
 {
@@ -299,37 +299,6 @@ void ghline_(int *ix1, int *ix2, int *iy)
 void glayer_(int *i)
 {
     layer = *i;
-}
-
-/*
- * Loads image from file to current layer, using SDL_image.
- */
-void gload_(const char *file, int *istat)
-{
-    SDL_Surface *image = NULL;
-
-    *istat = -1;
-    if (layer <= 0) return;
-
-#ifdef NO_IMAGE
-
-    image = SDL_LoadBMP(file);
-    if (!image) return;
-    if (layers[layer]) SDL_FreeSurface(layers[layer]);
-    layers[layer] = image;
-
-#else
-
-    image = IMG_Load(file);
-    if (!image) return;
-    if (layers[layer]) SDL_FreeSurface(layers[layer]);
-    layers[layer] = SDL_DisplayFormatAlpha(image);
-    SDL_FreeSurface(image);
-
-#endif
-
-    if (!layers[layer]) return;
-    *istat = 0;
 }
 
 /*
@@ -404,6 +373,39 @@ void gline_(int *ix1, int *iy1, int *ix2, int *iy2)
 
     gulock_();
 }
+
+/*
+ * Loads image from file to current layer, using SDL or SDL_image (if
+ * available).
+ */
+void gload_(const char *file, int *istat)
+{
+    SDL_Surface *image = NULL;
+
+    *istat = -1;
+    if (layer <= 0) return;
+
+#ifdef NO_IMAGE
+
+    image = SDL_LoadBMP(file);
+    if (!image) return;
+    if (layers[layer]) SDL_FreeSurface(layers[layer]);
+    layers[layer] = image;
+
+#else
+
+    image = IMG_Load(file);
+    if (!image) return;
+    if (layers[layer]) SDL_FreeSurface(layers[layer]);
+    layers[layer] = SDL_DisplayFormatAlpha(image);
+    SDL_FreeSurface(image);
+
+#endif
+
+    if (!layers[layer]) return;
+    *istat = 0;
+}
+
 
 /*
  * Locks current layer surface for direct pixel manipulation.

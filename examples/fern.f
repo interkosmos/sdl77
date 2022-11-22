@@ -10,9 +10,10 @@ C     AUTHOR: PHILIPP ENGEL
 C
 C     ******************************************************************
       PROGRAM FERN
-      EXTERNAL BARNS, PLOT
-      EXTERNAL GCLOSE, GCUR, GDELAY, GEVENT, GFLUSH, GOPEN
-      INTEGER  GKEY, GTIME
+      EXTERNAL  BARNS, PLOT
+      EXTERNAL  GCLOSE, GCUR, GDELAY, GEVENT, GFLUSH, GOPEN
+      INTEGER   GKEY
+      INTEGER*8 GTIME
 
       INCLUDE 'const.fi'
       INCLUDE 'event.fi'
@@ -26,7 +27,7 @@ C     ******************************************************************
       REAL    XY(N), YY(N)
       DATA DONE /.FALSE./
 
-      CALL SRAND(GTIME())
+      CALL SRAND(INT(GTIME() - (2**30 - 1)))
 C
 C     OPEN SDL 1.2 WINDOW AND HIDE CURSOR.
 C
@@ -44,9 +45,9 @@ C
    10 CONTINUE
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
       CALL GFLUSH()
       CALL GDELAY(IDELAY)
       IF (.NOT. DONE) GOTO 10

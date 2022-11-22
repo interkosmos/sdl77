@@ -36,9 +36,9 @@ C
    10 CONTINUE
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
       CALL GFLUSH()
       CALL GDELAY(IDELAY)
       IF (.NOT. DONE) GOTO 10
@@ -60,8 +60,8 @@ C
       INTEGER IW, IH
       REAL    MX, MY, W
 
-      INTEGER C, I, J, K
-      REAL    CX, CY, D, PX, PY, ZX, ZY
+      INTEGER I, J, K, L
+      REAL    CX, CY, DZ, PX, PY, ZX, ZY
 
       CALL GLAYER(0)
       CALL GLOCK()
@@ -73,19 +73,19 @@ C
       CX = MX + 2 * W * (I / (IW - 0.5))
       CY = MY + 2 * W * (J / (IH - 0.5))
 
-      DO 30 K = 0, NITER - 1
+      DO 30 K = 0, NITER
       PX = ZX**2 - ZY**2 + CX
       PY = 2 * ABS(ZX * ZY) + CY
       ZX = PX
       ZY = PY
-      D = ZX**2 + ZY**2
-      IF (D .GT. THRESH) GOTO 40
+      DZ = ZX**2 + ZY**2
+      IF (DZ .GT. THRESH) GOTO 40
    30 CONTINUE
 
    40 CONTINUE
       IF (K .LT. NITER) THEN
-        C = MIN(255, INT(8 * ABS(K + 1 - LOG(D) / LOG(2.0))))
-        CALL GCOLOR(255, C, 0)
+        L = MIN(255, INT(8 * ABS(K + 1 - LOG(DZ) / LOG(2.0))))
+        CALL GCOLOR(255, L, 0)
         CALL GPIXEL(I, J)
       END IF
    20 CONTINUE

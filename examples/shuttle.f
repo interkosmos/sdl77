@@ -10,9 +10,10 @@ C     AUTHOR: PHILIPP ENGEL
 C
 C     ******************************************************************
       PROGRAM SHUTTLE
-      EXTERNAL GCLOSE, GCOLOR, GCUR, GDELAY, GEVENT, GFILL, GFLUSH
-      EXTERNAL GLINE, GOPEN
-      INTEGER  GKEY, GTIME
+      EXTERNAL  GCLOSE, GCOLOR, GCUR, GDELAY, GEVENT, GFILL, GFLUSH
+      EXTERNAL  GLINE, GOPEN
+      INTEGER   GKEY
+      INTEGER*8 GTIME
 
       INCLUDE 'event.fi'
       INCLUDE 'key.fi'
@@ -48,7 +49,7 @@ C
 C
 C     SET RANDOM ORIENTATION.
 C
-      CALL SRAND(GTIME())
+      CALL SRAND(INT(GTIME() - (2**30 - 1)))
 
       B = RAND(0) * PI2
       H = RAND(0) * PI2
@@ -63,7 +64,7 @@ C
 
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
 
       CALL GCOLOR(0, 0, 0)
       CALL GFILL()
@@ -127,7 +128,7 @@ C
 C
 C     CHECK FOR KEYBOARD INPUT AND COPY LAYER TO SCREEN.
 C
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
       CALL GFLUSH()
       CALL GDELAY(IDELAY)
       IF (.NOT. DONE) GOTO 20

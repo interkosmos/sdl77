@@ -13,9 +13,10 @@ C     AUTHOR: PHILIPP ENGEL
 C
 C     ******************************************************************
       PROGRAM DEMO
-      EXTERNAL FTEXT, INIT
-      EXTERNAL GBLIT, GCLOSE, GCUR, GEVENT, GFLUSH, GLAYER
-      INTEGER  GKEY, GTICKS
+      EXTERNAL  FTEXT, INIT
+      EXTERNAL  GBLIT, GCLOSE, GCUR, GEVENT, GFLUSH, GLAYER
+      INTEGER   GKEY
+      INTEGER*8 GTICKS
 
       INCLUDE 'const.fi'
       INCLUDE 'event.fi'
@@ -24,8 +25,9 @@ C     ******************************************************************
       REAL    FT
       PARAMETER (IMGW=100, IMGH=100, MAXFPS=30, FT=1.0/MAXFPS*1000)
 
-      INTEGER IDELAY, IDT, IDXY, IEVENT, ISTAT, IT
-      LOGICAL DONE
+      INTEGER   IDELAY, IDT, IDXY, IEVENT, ISTAT
+      INTEGER*8 IT
+      LOGICAL   DONE
       DATA DONE, IDXY /.FALSE.,0/
 C
 C     OPEN SDL 1.2 WINDOW AND INITIALISE THE BITMAP FONT.
@@ -38,11 +40,11 @@ C     MAIN LOOP, RUNS AT 30 FPS.
 C
    10 CONTINUE
       IT = GTICKS()
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
 
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
 
       CALL GLAYER(1)
@@ -53,7 +55,7 @@ C
       IDXY = MOD(IDXY + 1, IMGW)
 
       CALL GFLUSH()
-      IDT = GTICKS() - IT
+      IDT = INT(GTICKS() - IT)
       IDELAY = MAX(0, INT(FT - IDT))
       IF (IDELAY .GT. 0) CALL GDELAY(IDELAY)
       IF (.NOT. DONE) GOTO 10
