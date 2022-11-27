@@ -47,8 +47,8 @@ C
       IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
 
-      CALL GLAYER(1)
-      CALL GBLIT(0, IDXY, IDXY, 0, 0, IW, IH)
+      CALL GLAYER(0)
+      CALL GBLIT(1, IDXY, IDXY, 0, 0, IW, IH)
       CALL FTEXT(304, 128, 'FORTRAN FOREVER!')
       CALL FTEXT(304, 176, 'FORTRAN FOREVER!')
       CALL FTEXT(304, 224, 'FORTRAN FOREVER!')
@@ -111,12 +111,12 @@ C
 C
 C     FILL BUFFER LAYER (1) WITH BACKGROUND LAYER (2).
 C
-      CALL GLAYER(2)
+      CALL GLAYER(1)
       DO 10 I = 0, IW / IMGW
       DO 20 J = 0, IH / IMGH
       IX = I * IMGW
       IY = J * IMGH
-      CALL GBLIT(1, 0, 0, IX, IY, IMGW, IMGH)
+      CALL GBLIT(2, 0, 0, IX, IY, IMGW, IMGH)
    20 CONTINUE
    10 CONTINUE
       END
@@ -150,12 +150,12 @@ C
       INTEGER IW, IH, L, N
       COMMON /FONT/ L, IW, IH, N
 
-      CALL GLAYER(L)
+      CALL GLAYER(0)
       DO 10 I = 1, LTRIM(STR)
       J = IACHAR(STR(I:I)) - 32
       K = (I - 1) * IW
       ICX = IW * MOD(J, N)
       ICY = IH * (J / N)
-      CALL GBLIT(0, ICX, ICY, IX + K, IY, IW, IH)
+      CALL GBLIT(L, ICX, ICY, IX + K, IY, IW, IH)
    10 CONTINUE
       END

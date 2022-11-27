@@ -68,9 +68,10 @@ long gticks_();
 long gtime_();
 
 void galloc_(int *istat);
-void gblit_(int *layer, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih);
+void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih);
 void gclose_();
 void gcolor_(int *ir, int *ig, int *ib);
+void gcolk_(int *ir, int *ig, int *b);
 void gcppal_(int *ix, int *iy, int *i);
 void gcppix_(int *ix1, int *iy1, int *ix2, int *iy2);
 void gcreat_(int *iw, int *ih);
@@ -140,13 +141,13 @@ void galloc_(int *istat)
 }
 
 /*
- * Blits rectangle copied from global layer surface to given layer surface.
+ * Blits rectangle copied from layer `i` to screen layer.
  */
 void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih)
 {
     SDL_Rect src = { (Sint16) *ix1, (Sint16) *iy1, (Uint16) *iw, (Uint16) *ih };
     SDL_Rect dst = { (Sint16) *ix2, (Sint16) *iy2, (Uint16) *iw, (Uint16) *ih };
-    SDL_BlitSurface(layers[layer], &src, layers[*i], &dst);
+    SDL_BlitSurface(layers[*i], &src, layers[layer], &dst);
 }
 
 /*
@@ -176,6 +177,14 @@ void gclose_()
 void gcolor_(int *ir, int *ig, int *ib)
 {
     color = SDL_MapRGB(layers[0]->format, *ir, *ig, *ib);
+}
+
+/*
+ * Sets colour key of current layer.
+ */
+void gcolk_(int *ir, int *ig, int *ib)
+{
+    SDL_SetColorKey(layers[layer], SDL_SRCCOLORKEY, SDL_MapRGB(layers[layer]->format, *ir, *ig, *ib));
 }
 
 /*
@@ -390,7 +399,7 @@ void gload_(const char *file, int *istat)
     image = SDL_LoadBMP(file);
     if (!image) return;
     if (layers[layer]) SDL_FreeSurface(layers[layer]);
-    layers[layer] = image;
+    layers[layer] = SDL_DisplayFormat(image);
 
 #else
 

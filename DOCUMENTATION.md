@@ -18,15 +18,18 @@ Returns UNIX timestamp as 64-bit integer.
 Returns allocation status of given layer. The status is `1` if the layer is
 allocated, else `0`.
 
-### SUBROUTINE GBLIT(LAYER, IX1, IY1, IX2, IY2, IW, IH)
-Blits rectangle copied from layer selected with `GLAYER()` to given layer
-`LAYER`.
+### SUBROUTINE GBLIT(I, IX1, IY1, IX2, IY2, IW, IH)
+Blits rectangle copied from source layer `I` to target layer selected with
+`GLAYER()`.
 
 ### SUBROUTINE GCLOSE()
 Cleans up and quits SDL 1.2.
 
 ### SUBROUTINE GCOLOR(IR, IG, IB)
 Sets current colour in RGB.
+
+### SUBROUTINE GCOLK(IR, IG, IB)
+Sets colour key (transparent colour) in current layer.
 
 ### SUBROUTINE GCPPAL(IX, IY, I)
 Copies palette colour `I` to current layer surface. The surface has to be
