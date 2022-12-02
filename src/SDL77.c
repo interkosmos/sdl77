@@ -8,17 +8,17 @@
  *
  * To create the static library libSDL77.a, run:
  *
- * $ gcc `sdl-config --cflags` -c SDL77.c
+ * $ gcc -fPIC `sdl-config --cflags` -c SDL77.c
  * $ ar rcs libSDL77.a SDL77.o
  *
- * Linking a Fortran program against SDL 1.2:
+ * Linking a Fortran program `demo.f` against SDL 1.2:
  *
  * $ gfortran `sdl-config --cflags` -o demo demo.f libSDL77.a
  *   `sdl-config --libs` -lSDL_image -lSDL_mixer
  *
  * Pass NO_IMAGE and/or NO_MIXER to build without external libraries:
  *
- * $ gcc -DNO_IMAGE -DNO_MIXER `sdl-config --cflags` -c SDL77.c
+ * $ gcc -DNO_IMAGE -DNO_MIXER -fPIC `sdl-config --cflags` -c SDL77.c
  */
 
 #include <time.h>
@@ -30,26 +30,27 @@
 
 #ifndef NO_MIXER
 #include "SDL_mixer.h"
-
 #define AUDIO_FREQ     MIX_DEFAULT_FREQUENCY    /* 22050 Hz */
 #define AUDIO_FORMAT   MIX_DEFAULT_FORMAT       /* AUDIO_S16SYS by default */
 #define AUDIO_CHANNELS MIX_DEFAULT_CHANNELS     /* mono or stereo */
 #define AUDIO_CHUNK    4096                     /* audio chunk size in bytes */
+#define NCHUNKS        8                        /* max. number of sound effects */
 #endif
 
-#define NLAYERS        8                        /* max. number of layer surfaces */
-#define SCREEN_BPP     32                       /* colour depth (32 bit) */
-#define SDL_FLAG       SDL_SWSURFACE            /* SDL surface flag: use software rendering by default */
+#define NLAYERS    8                            /* max. number of layer surfaces */
+#define SCREEN_BPP 32                           /* colour depth (32 bit) */
+#define SDL_FLAG   SDL_SWSURFACE                /* SDL surface flag: use software rendering by default */
 
 #define MIN(a, b) (((a)<(b))?(a):(b))
 #define MAX(a, b) (((a)>(b))?(a):(b))
 
+#ifndef NO_MIXER
+Mix_Music *music           = NULL;              /* SDL_mixer handle */
+Mix_Chunk *chunks[NCHUNKS] = { NULL };          /* sound effects */
+#endif
+
 SDL_Event   event;                              /* last event */
 SDL_Surface *layers[NLAYERS] = { NULL };        /* layer surfaces */
-
-#ifndef NO_MIXER
-Mix_Music *music  = NULL;                       /* SDL_mixer handle */
-#endif
 
 int layer         = 0;                          /* currently selected layer (0 is screen layer) */
 int screen_width  = 0;                          /* window width */
@@ -72,8 +73,8 @@ void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih);
 void gclose_();
 void gcolor_(int *ir, int *ig, int *ib);
 void gcolk_(int *ir, int *ig, int *b);
-void gcppal_(int *ix, int *iy, int *i);
-void gcppix_(int *ix1, int *iy1, int *ix2, int *iy2);
+void gcppal_(int *i, int *ix, int *iyx);
+void gcppix_(int *i, int *ix1, int *iy1, int *ix2, int *iy2);
 void gcreat_(int *iw, int *ih);
 void gcur_(int *itoggle);
 void gdelay_(int *idelay);
@@ -83,11 +84,12 @@ void gfillr_(int *ix, int *iy, int *iw, int *ih);
 void gflush_();
 void ggrab_(int *itoggle);
 void ghline_(int *ix1, int *ix2, int *iy);
-void glayer_(int *layer);
+void glayer_(int *i);
 void gline_(int *ix1, int *iy1, int *ix2, int *iy2);
 void gload_(const char *file, int *istat);
 void glock_();
-void gmouse_(long *ixrel, long *iyrel);
+void gmbut_(int *ibut1, int *ibut2, int *ibut3);
+void gmouse_(int *ixrel, int *iyrel, int *ix, int *iy);
 void gopen_(int *iw, int *ih, const char *title, int *istat);
 void gpal_(int *n);
 void gpixel_(int *ix, int *iy);
@@ -99,9 +101,12 @@ void gvline_(int *ix, int *iy1, int *iy2);
 void gwarp_(int *ix, int *iy);
 
 #ifndef NO_MIXER
+void mchan_(int *i, int *ichan, int *loops);
 void mclose_();
 void mhalt_();
-void mopen_(const char *file);
+void mload_(const char *file, int *istat);
+void mloadw_(int *i, const char *file, int *istat);
+void mpause_();
 void mplay_(int *loops);
 #endif
 
@@ -135,7 +140,7 @@ long gtime_()
  */
 void galloc_(int *istat)
 {
-    *istat = 1;
+    *istat = -1;
     if (!layers[layer]) return;
     *istat = 0;
 }
@@ -155,17 +160,25 @@ void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih)
  */
 void gclose_()
 {
+    if (palette) free(palette);
+
     for (int i = 1; i < NLAYERS; i++)
     {
         if (layers[i]) SDL_FreeSurface(layers[i]);
     }
 
-    if (palette) free(palette);
-
 #ifndef NO_MIXER
+
     if (music) Mix_FreeMusic(music);
+
+    for (int i = 1; i < NCHUNKS; i++)
+    {
+        if (chunks[i]) Mix_FreeChunk(chunks[i]);
+    }
+
     Mix_CloseAudio();
     Mix_Quit();
+
 #endif
 
     SDL_Quit();
@@ -191,21 +204,21 @@ void gcolk_(int *ir, int *ig, int *ib)
  * Copies colour from palette to layer surface. The surface has to be
  * locked beforehand.
  */
-void gcppal_(int *ix, int *iy, int *i)
+void gcppal_(int *i, int *ix, int *iy)
 {
     Uint32 *pixels = (Uint32 *) layers[layer]->pixels;
     pixels[(*iy * layers[layer]->w) + *ix] = palette[*i];
 }
 
 /*
- * Copies pixel from layer surface to screen surface.
- * The screen surface has to be locked beforehand.
+ * Copies pixel from layer `i` to target layer selected with `glayer_()`.
+ * The target layer has to be locked beforehand with `glock_()`.
  */
-void gcppix_(int *ix1, int *iy1, int *ix2, int *iy2)
+void gcppix_(int *i, int *ix1, int *iy1, int *ix2, int *iy2)
 {
-    Uint32 *pixels = (Uint32 *) layers[layer]->pixels;
-    Uint32 *scratch = (Uint32 *) layers[0]->pixels;
-    scratch[(*iy2 * layers[0]->w) + *ix2] = pixels[(*iy1 * layers[layer]->w) + *ix1];
+    Uint32 *pixels  = (Uint32 *) layers[*i]->pixels;
+    Uint32 *scratch = (Uint32 *) layers[layer]->pixels;
+    scratch[(*iy2 * layers[layer]->w) + *ix2] = pixels[(*iy1 * layers[*i]->w) + *ix1];
 }
 
 /*
@@ -415,7 +428,6 @@ void gload_(const char *file, int *istat)
     *istat = 0;
 }
 
-
 /*
  * Locks current layer surface for direct pixel manipulation.
  */
@@ -425,19 +437,40 @@ void glock_()
 }
 
 /*
- * Returns relative mouse motion.
+ * Returns mouse button press.
  */
-void gmouse_(long *ixrel, long *iyrel)
+void gmbut_(int *ibut1, int *ibut2, int *ibut3)
+{
+    *ibut1 = 0; *ibut2 = 0; *ibut3 = 0;
+
+    if (event.type != SDL_MOUSEBUTTONDOWN &&
+        event.type != SDL_MOUSEBUTTONUP) return;
+
+    if (event.button.button == SDL_BUTTON_LEFT)   *ibut1 = 1;
+    if (event.button.button == SDL_BUTTON_MIDDLE) *ibut2 = 1;
+    if (event.button.button == SDL_BUTTON_RIGHT)  *ibut3 = 1;
+}
+
+/*
+ * Returns mouse motion and absolute mouse position.
+ */
+void gmouse_(int *ixrel, int *iyrel, int *ix, int *iy)
 {
     if (event.type == SDL_MOUSEMOTION)
     {
-        *ixrel = (long) event.motion.xrel;
-        *iyrel = (long) event.motion.yrel;
+        *ixrel = (int) event.motion.xrel;
+        *iyrel = (int) event.motion.yrel;
+
+        *ix = (int) event.motion.x;
+        *iy = (int) event.motion.y;
     }
     else
     {
         *ixrel = 0;
         *iyrel = 0;
+
+        *ix = 0;
+        *iy = 0;
     }
 }
 
@@ -453,13 +486,13 @@ void gopen_(int *iw, int *ih, const char *title, int *istat)
     if (SDL_WasInit(SDL_INIT_VIDEO) != 0) return;
 
 #ifndef NO_MIXER
-    if (Mix_Init(MIX_INIT_OGG) == -1) return;
+    if (Mix_Init(MIX_INIT_OGG) < 0) return;
 #endif
 
-    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) == -1) return;
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) return;
 
 #ifndef NO_MIXER
-    if (Mix_OpenAudio(AUDIO_FREQ, AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_CHUNK) == -1) return;
+    if (Mix_OpenAudio(AUDIO_FREQ, AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_CHUNK) < 0) return;
 #endif
 
     screen_width = *iw;
@@ -561,7 +594,18 @@ void gwarp_(int *ix, int *iy)
 
 #ifndef NO_MIXER
 /*
- * Closes audio file.
+ * Plays sound effect `i` in chunks array on channel `ichan`.
+ * Set `ichan` to -1 to use the next free channel.
+ */
+void mchan_(int *i, int *ichan, int *loops)
+{
+    if (*i < 0 || *i >= NCHUNKS) return;
+    if (!chunks[*i]) return;
+    Mix_PlayChannel(*ichan, chunks[*i], *loops);
+}
+
+/*
+ * Closes music file.
  */
 void mclose_()
 {
@@ -569,7 +613,7 @@ void mclose_()
 }
 
 /*
- * Halts audio playback.
+ * Halts music playback.
  */
 void mhalt_()
 {
@@ -577,16 +621,38 @@ void mhalt_()
 }
 
 /*
- * Opens audio file.
+ * Loads music file.
  */
-void mopen_(const char *file)
+void mload_(const char *file, int *istat)
 {
+    *istat = -1;
     if (music) Mix_FreeMusic(music);
     music = Mix_LoadMUS(file);
+    if (music) *istat = 0;
 }
 
 /*
- * Plays audio file.
+ * Loads WAV file to index `i` in chunks array.
+ */
+void mloadw_(int *i, const char *file, int *istat)
+{
+    *istat = -1;
+    if (*i < 0 || *i >= NCHUNKS) return;
+    if (chunks[*i]) Mix_FreeChunk(chunks[*i]);
+    chunks[*i] = Mix_LoadWAV(file);
+    if (chunks[*i]) *istat = 0;
+}
+
+/*
+ * Pauses music.
+ */
+void mpause_()
+{
+    Mix_PauseMusic();
+}
+
+/*
+ * Plays music.
  */
 void mplay_(int *loops)
 {

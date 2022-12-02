@@ -14,7 +14,7 @@ The library has the following dependencies:
 * SDL_mixer
 
 You may have to install additional development headers. See the
-[documentation](DOCUMENTATION.md) for the API description.
+[documentation](API.md) for the API description.
 
 ## Build Instructions
 On FreeBSD, first install the dependencies:
@@ -150,7 +150,7 @@ Some example programs can be found in directory `examples/`:
 * **shuttle** renders the wireframe model of a space shuttle.
 * **smoke** renders a 3-D chaotic attractor.
 * **sphere** draws a shaded sphere.
-* **track** plays an audio track in OGG format.
+* **track** plays audio track in OGG format and optionally WAV sound effect.
 
 Build the examples with:
 

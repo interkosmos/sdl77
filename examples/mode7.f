@@ -111,7 +111,6 @@ C
 
       CALL GLAYER(0)
       CALL GLOCK()
-      CALL GLAYER(1)
 
       DO 10 J = 0, IH2 - 1
       DO 20 I = -IW2, IW2 - 1
@@ -124,11 +123,10 @@ C
       RY = SX * SIN(ALPHA) + SY * COS(ALPHA)
       IX = ABSMOD(INT(RX * F + X), IMGW - 1)
       IY = ABSMOD(INT(RY * F + Y), IMGH - 1)
-      CALL GCPPIX(IX, IY, IW2 + I, IH2 + J)
+      CALL GCPPIX(1, IX, IY, IW2 + I, IH2 + J)
    20 CONTINUE
    10 CONTINUE
 
-      CALL GLAYER(0)
       CALL GULOCK()
       END
 C     ******************************************************************

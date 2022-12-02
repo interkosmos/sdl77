@@ -22,6 +22,13 @@ allocated, else `0`.
 Blits rectangle copied from source layer `I` to target layer selected with
 `GLAYER()`.
 
+### SUBROUTINE GMBUT(IBUT1, IBUT2, IBUT3)
+Returns mouse button clicks (left, middle, right). On click, the button state
+is set to `1`.
+
+### SUBROUTINE GMOUSE(IXREL, IXREL, IX, IY)
+Returns relative mouse motion and absolute mouse position.
+
 ### SUBROUTINE GCLOSE()
 Cleans up and quits SDL 1.2.
 
@@ -29,15 +36,16 @@ Cleans up and quits SDL 1.2.
 Sets current colour in RGB.
 
 ### SUBROUTINE GCOLK(IR, IG, IB)
-Sets colour key (transparent colour) in current layer.
+Sets colour key (transparent colour) in current layer. Not necessary for images
+with alpha channels that have been loaded with SDL_image.
 
-### SUBROUTINE GCPPAL(IX, IY, I)
+### SUBROUTINE GCPPAL(I, IX, IY)
 Copies palette colour `I` to current layer surface. The surface has to be
 locked beforehand with `GLOCK()`.
 
-### SUBROUTINE GCPPIX(IX1, IY1, IX2, IY2)
-Copies pixel from layer surface to screen surface (`0`). The screen surface has
-to be locked beforehand with `GLOCK()`.
+### SUBROUTINE GCPPIX(I, IX1, IY1, IX2, IY2)
+Copies pixel from given layer `I` to target layer selected with `GLAYER()`. The
+target layer has to be locked beforehand with `GLOCK()`.
 
 ### SUBROUTINE GCREAT(IW, IH)
 Creates a new layer selected with `GLAYER()` of given size. Replaces existing
@@ -69,8 +77,8 @@ Grabs mouse and keyboard input if `ITOGGLE` is `1`.
 Draws horizontal line to layer surface. No bounds checking!
 
 ### SUBROUTINE GLAYER(LAYER)
-Selects layer by layer number. The screen layer is alway `0`. Up to 7 additional
-layers can be created, either as buffer or to store images loaded from file.
+Selects layer by index. The screen layer is alway `0`. Up to 7 additional layers
+can be created, either as buffer or to store images loaded from file.
 
 ### SUBROUTINE GLINE(IX1, IY1, IX2, IY2)
 Draws a line from `IX1`, `IY1` to `IX2`, `IY2`.
@@ -84,7 +92,7 @@ to `0` if the image has been loaded successfully.
 Locks current layer for direct pixel manipulation.
 
 ### SUBROUTINE GMOUSE(IXREL, IYREL)
-Returns relative mouse motion.
+Returns relative mouse motion as 8-byte integer.
 
 ### SUBROUTINE GOPEN(IW, IH, TITLE, ISTAT)
 Opens the SDL 1.2 window. Only a single window can be opened at a time. `TITLE`
@@ -98,7 +106,7 @@ Allocates palette memory for `N` colours.
 Draws single pixel on layer. The surface must be locked.
 
 ### SUBROUTINE GSETP(I, IR, IG, IB)
-Sets RGB palette colour at index `I` in screen format.
+Sets RGB palette colour at index `I` in screen format to given RGB values.
 
 ### SUBROUTINE GSSHOT(FILE)
 Copies screen surface in BMP format to given file (screen shot). The file path
@@ -117,15 +125,28 @@ Draws vertical line to layer surface. No bounds checking!
 ### SUBROUTINE GWARP(IX, IY)
 Warps mouse to `IX`, `IY`.
 
+### SUBROUTINE MCHAN(I, ICHAN, LOOPS)
+Plays sound effect `I` in chunk array on channel `ICHAN`. Set the channel to
+`-1` to use the next free. `LOOPS` sets the number of loops to play for.
+
 ### SUBROUTINE MCLOSE()
-Closes current music file.
+Closes music file.
 
 ### SUBROUTINE MHALT()
-Halts music playback.
+Stops music playback.
 
-### SUBROUTINE MOPEN(FILE)
-Opens music file (preferable, in OGG format).
+### SUBROUTINE MLOAD(FILE, ISTAT)
+Loads music file (preferable, in OGG format). `ISTAT` is set to `0` if the file
+has been loaded successfully.
+
+### SUBROUTINE MLOADW(I, FILE, ISTAT)
+Loads WAV file to position `I` in audio chunk array. Up to eight sound effects
+may be loaded (from `0` to `7`). `ISTAT` is set to `0` if the file has been
+loaded successfully.
+
+### SUBROUTINE MPAUSE()
+Pauses music playback.
 
 ### SUBROUTINE MPLAY(LOOPS)
-Plays music file. `NLOOPS` sets the number of loops to play for, `0` means “play
+Plays music file. `LOOPS` sets the number of loops to play for, `0` means “play
 once and stop”.
