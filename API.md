@@ -1,4 +1,4 @@
-# SDL77 API Documentation
+# SDL 77 API Documentation
 
 ## Functions
 

@@ -1,9 +1,10 @@
-# SDL77
-SDL77 is a C library for game development in FORTRAN 77 that provides
+# SDL 77
+
+SDL 77 is a C library for game development in FORTRAN 77 that provides
 some glue code to access the software renderer of SDL 1.2. Common
 [FORTRAN/C calling conventions](https://www.math.utah.edu/software/c-with-fortran.html)
 are used for mixed-language programming (compatible to f77, f2c, g77,
-GNU Fortran, DEC/Compaq, Portland Group, SGI, Sun, …). For modern
+GNU Fortran, Digital/Compaq, Portland Group, SGI, Sun, …). For modern
 Fortran 2008 interface bindings to SDL 2.0, see
 [fortran-sdl2](https://github.com/interkosmos/fortran-sdl2).
 
@@ -17,13 +18,14 @@ You may have to install additional development headers. See the
 [documentation](API.md) for the API description.
 
 ## Build Instructions
+
 On FreeBSD, first install the dependencies:
 
 ```
 # pkg install audio/sdl_mixer devel/sdl12 graphics/sdl_image
 ```
 
-Then, build `libSDL77.a` with GCC by executing the provided Makefile:
+Then, build `libSDL 77.a` with GCC by executing the provided Makefile:
 
 ```
 $ make
@@ -48,18 +50,19 @@ And only bare SDL 1.2, without SDL_image and SDL_mixer:
 $ make nolibs
 ```
 
-Link your FORTRAN 77 program against `libSDL77.a -lSDL -lSDL_image -lSDL_mixer`.
-Alternatively, you can simply link with object file `SDL77.o` instead of
-`libSDL77.a`.
+Link your FORTRAN 77 program against `libSDL 77.a -lSDL -lSDL_image -lSDL_mixer`.
+Alternatively, you can simply link with object file `SDL 77.o` instead of
+`libSDL 77.a`.
 
 ## Example
+
 The following example program `demo.f` in ANSI FORTRAN 77 opens an SDL
 1.2 window and fills a green rectangle.
 
 ```fortran
 C     ******************************************************************
 C
-C     SDL77 DEMO PROGRAM IN FORTRAN 77.
+C     SDL 77 DEMO PROGRAM IN FORTRAN 77.
 C
 C     ******************************************************************
       PROGRAM DEMO
@@ -72,8 +75,8 @@ C
 C
 C     PARAMETERS.
 C
-      INTEGER IDELAY, IESC, IEQUIT, IW, IH
-      PARAMETER (IDELAY=50, IESC=27, IEQUIT=12, IW=640, IH=480)
+      INTEGER EQUIT, IDELAY, IW, IH, KESC
+      PARAMETER (EQUIT=12, IDELAY=50, IW=640, IH=480, KESC=27)
 C
 C     VARIABLES.
 C
@@ -94,12 +97,12 @@ C     PROCESS EVENTS.
 C
    20 CONTINUE
       CALL GEVENT(IEVENT, ISTAT)
-      IF (IEVENT .EQ. IEQUIT) DONE = .TRUE.
+      IF (IEVENT .EQ. EQUIT) DONE = .TRUE.
       IF (ISTAT .EQ. 1) GOTO 20
 C
 C     PROCESS KEYBOARD INPUT.
 C
-      IF (GKEY(IESC) .EQ. 1) DONE = .TRUE.
+      IF (GKEY(KESC) .EQ. 1) DONE = .TRUE.
 C
 C     FILL RECTANGLE.
 C
@@ -119,10 +122,18 @@ C
       END
 ```
 
-Link the demo program against SDL77, SDL, SDL_image, and SDL_mixer:
+Link the demo program against SDL 77, SDL, SDL_image, and SDL_mixer:
 
 ```
 $ gfortran -o demo demo.f libSDL77.a -lSDL -lSDL_image -lSDL_mixer
+$ ./demo
+```
+
+To compile without SDL_image and SDL_mixer, run:
+
+```
+$ make nolibs
+$ gfortran -o demo demo.f libSDL 77.a -lSDL
 $ ./demo
 ```
 
@@ -137,6 +148,7 @@ $ ./demo
 ```
 
 ## Further Examples
+
 Some example programs can be found in directory `examples/`:
 
 * **bship** draws the burning ship fractal.
@@ -159,4 +171,5 @@ $ make examples
 ```
 
 ## Licence
+
 ISC

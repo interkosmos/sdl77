@@ -1,5 +1,5 @@
 /*
- * SDL77 - SDL 1.2 abstraction layer for FORTRAN 77
+ * SDL 77 - SDL 1.2 abstraction layer for FORTRAN 77
  * Copyright (c) 2022, Philipp Engel (ISC Licence)
  *
  * A collection of glue routines that take advantage of FORTRAN/C
@@ -39,7 +39,7 @@
 
 #define NLAYERS    8                            /* max. number of layer surfaces */
 #define SCREEN_BPP 32                           /* colour depth (32 bit) */
-#define SDL_FLAG   SDL_SWSURFACE                /* SDL surface flag: use software rendering by default */
+#define SDL_FLAG   0                            /* SDL surface flag */
 
 #define MIN(a, b) (((a)<(b))?(a):(b))
 #define MAX(a, b) (((a)>(b))?(a):(b))
@@ -65,12 +65,12 @@ extern "C" {
 #endif
 
 int  gkey_(int *icode);
-long gticks_();
-long gtime_();
+long gticks_(void);
+long gtime_(void);
 
 void galloc_(int *istat);
 void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih);
-void gclose_();
+void gclose_(void);
 void gcolor_(int *ir, int *ig, int *ib);
 void gcolk_(int *ir, int *ig, int *b);
 void gcppal_(int *i, int *ix, int *iyx);
@@ -79,15 +79,15 @@ void gcreat_(int *iw, int *ih);
 void gcur_(int *itoggle);
 void gdelay_(int *idelay);
 void gevent_(int *ievent, int *istat);
-void gfill_();
+void gfill_(void);
 void gfillr_(int *ix, int *iy, int *iw, int *ih);
-void gflush_();
+void gflush_(void);
 void ggrab_(int *itoggle);
 void ghline_(int *ix1, int *ix2, int *iy);
 void glayer_(int *i);
 void gline_(int *ix1, int *iy1, int *ix2, int *iy2);
 void gload_(const char *file, int *istat);
-void glock_();
+void glock_(void);
 void gmbut_(int *ibut1, int *ibut2, int *ibut3);
 void gmouse_(int *ixrel, int *iyrel, int *ix, int *iy);
 void gopen_(int *iw, int *ih, const char *title, int *istat);
@@ -95,18 +95,18 @@ void gpal_(int *n);
 void gpixel_(int *ix, int *iy);
 void gsetp_(int *i, int *ir, int *ig, int *ib);
 void gsshot_(const char *file);
-void gulock_();
+void gulock_(void);
 void gvideo_(int *ihw, int *iwm, long long *ivm);
 void gvline_(int *ix, int *iy1, int *iy2);
 void gwarp_(int *ix, int *iy);
 
 #ifndef NO_MIXER
 void mchan_(int *i, int *ichan, int *loops);
-void mclose_();
-void mhalt_();
+void mclose_(void);
+void mhalt_(void);
 void mload_(const char *file, int *istat);
 void mloadw_(int *i, const char *file, int *istat);
-void mpause_();
+void mpause_(void);
 void mplay_(int *loops);
 #endif
 
@@ -121,7 +121,7 @@ int gkey_(int *icode)
 /*
  * Returns time in msec since program start.
  */
-long gticks_()
+long gticks_(void)
 {
     return (long) SDL_GetTicks();
 }
@@ -129,7 +129,7 @@ long gticks_()
 /*
  * Returns current time as UNIX timestamp.
  */
-long gtime_()
+long gtime_(void)
 {
     return (long) time(NULL);
 }
@@ -158,7 +158,7 @@ void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih)
 /*
  * Cleans up and quits SDL 1.2.
  */
-void gclose_()
+void gclose_(void)
 {
     if (palette) free(palette);
 
@@ -258,7 +258,7 @@ void gevent_(int *ievent, int *istat)
 /*
  * Fills current layer surface in global colour.
  */
-void gfill_()
+void gfill_(void)
 {
     SDL_FillRect(layers[layer], NULL, color);
 }
@@ -275,7 +275,7 @@ void gfillr_(int *ix, int *iy, int *iw, int *ih)
 /*
  * Flips screen surface.
  */
-void gflush_()
+void gflush_(void)
 {
     SDL_Flip(layers[0]);
 }
@@ -431,7 +431,7 @@ void gload_(const char *file, int *istat)
 /*
  * Locks current layer surface for direct pixel manipulation.
  */
-void glock_()
+void glock_(void)
 {
     if (SDL_MUSTLOCK(layers[layer])) SDL_LockSurface(layers[layer]);
 }
@@ -546,7 +546,7 @@ void gsshot_(const char *file)
 /*
  * Unlocks layer surface.
  */
-void gulock_()
+void gulock_(void)
 {
     if (SDL_MUSTLOCK(layers[layer])) SDL_UnlockSurface(layers[layer]);
 }
@@ -607,7 +607,7 @@ void mchan_(int *i, int *ichan, int *loops)
 /*
  * Closes music file.
  */
-void mclose_()
+void mclose_(void)
 {
     if (music) Mix_FreeMusic(music);
 }
@@ -615,7 +615,7 @@ void mclose_()
 /*
  * Halts music playback.
  */
-void mhalt_()
+void mhalt_(void)
 {
     Mix_HaltMusic();
 }
@@ -646,7 +646,7 @@ void mloadw_(int *i, const char *file, int *istat)
 /*
  * Pauses music.
  */
-void mpause_()
+void mpause_(void)
 {
     Mix_PauseMusic();
 }
