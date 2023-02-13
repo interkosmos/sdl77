@@ -27,7 +27,7 @@ C     ******************************************************************
       LOGICAL DONE, NEXT
       DATA DONE, NEXT /.FALSE.,.TRUE./
 
-      CALL SRAND(INT(GTIME() - (2**30 - 1)))
+      CALL SRAND(ABS(INT(GTIME())))
 C
 C     OPEN WINDOW, HIDE CURSOR, INITIALISE FIZZLE FADE.
 C

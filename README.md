@@ -19,13 +19,13 @@ You may have to install additional development headers. See the
 
 ## Build Instructions
 
-On FreeBSD, first install the dependencies:
+First, install the dependencies. On FreeBSD, run:
 
 ```
 # pkg install audio/sdl_mixer devel/sdl12 graphics/sdl_image
 ```
 
-Then, build `libSDL 77.a` with GCC by executing the provided Makefile:
+Then, build `libSDL77.a` with GCC by executing the provided Makefile:
 
 ```
 $ make
@@ -50,9 +50,9 @@ And only bare SDL 1.2, without SDL_image and SDL_mixer:
 $ make nolibs
 ```
 
-Link your FORTRAN 77 program against `libSDL 77.a -lSDL -lSDL_image -lSDL_mixer`.
-Alternatively, you can simply link with object file `SDL 77.o` instead of
-`libSDL 77.a`.
+Link your FORTRAN 77 program against `libSDL77.a -lSDL -lSDL_image -lSDL_mixer`.
+Alternatively, you can simply link with object file `SDL77.o` instead of
+`libSDL77.a`.
 
 ## Example
 

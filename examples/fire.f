@@ -123,16 +123,11 @@ C
       DO 30 J = 0, IFH - 1
       DO 40 I = 0, IFW - 1
       K = (J * IFW) + I + 1
-C      IF (IFIREY(K) .EQ. 0) CYCLE
       CALL GCPPAL(IFIREY(K), I * 2,     IY + J * 2)
       CALL GCPPAL(IFIREY(K), I * 2 + 1, IY + J * 2)
-   40 CONTINUE
-      DO 50 I = 0, IFW - 1
-      K = (J * IFW) + I + 1
-C      IF (IFIREY(K) .EQ. 0) CYCLE
       CALL GCPPAL(IFIREY(K), I * 2,     IY + J * 2 + 1)
       CALL GCPPAL(IFIREY(K), I * 2 + 1, IY + J * 2 + 1)
-   50 CONTINUE
+   40 CONTINUE
    30 CONTINUE
       CALL GULOCK()
       END

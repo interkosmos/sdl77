@@ -27,7 +27,7 @@ C     ******************************************************************
       REAL    XY(N), YY(N)
       DATA DONE /.FALSE./
 
-      CALL SRAND(INT(GTIME() - (2**30 - 1)))
+      CALL SRAND(ABS(INT(GTIME())))
 C
 C     OPEN SDL 1.2 WINDOW AND HIDE CURSOR.
 C

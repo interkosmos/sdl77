@@ -49,7 +49,7 @@ C
 C
 C     SET RANDOM ORIENTATION.
 C
-      CALL SRAND(INT(GTIME() - (2**30 - 1)))
+      CALL SRAND(ABS(INT(GTIME())))
 
       B = RAND(0) * PI2
       H = RAND(0) * PI2
