@@ -160,6 +160,7 @@ Some example programs can be found in directory `examples/`:
 * **flower** draws a sunflower fractal.
 * **font** prints text with a bitmap font.
 * **mode7** shows affine transformation for perspective correction.
+* **plasma** renders animated [plasma effect](https://en.wikipedia.org/wiki/Plasma_effect).
 * **root3** is another fractal demo.
 * **shuttle** renders the wireframe model of a space shuttle.
 * **smoke** renders a 3-D chaotic attractor.

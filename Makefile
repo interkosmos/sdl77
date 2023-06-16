@@ -28,6 +28,7 @@ examples: $(TARGET)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o flower examples/flower.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o font examples/font.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o mode7 examples/mode7.f $(LDLIBS)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o plasma examples/plasma.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o root3 examples/root3.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o shuttle examples/shuttle.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o smoke examples/smoke.f $(LDLIBS)
@@ -57,6 +58,7 @@ clean:
 	if [ -e flower ]; then rm flower; fi
 	if [ -e font ]; then rm font; fi
 	if [ -e mode7 ]; then rm mode7; fi
+	if [ -e plasma ]; then rm plasma; fi
 	if [ -e root3 ]; then rm root3; fi
 	if [ -e shuttle ]; then rm shuttle; fi
 	if [ -e smoke ]; then rm smoke; fi
