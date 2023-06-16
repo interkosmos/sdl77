@@ -19,6 +19,7 @@ $(TARGET):
 	$(AR) $(AFLAGS) $(TARGET) SDL77.o
 
 examples: $(TARGET)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o archi examples/archi.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o bship examples/bship.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o engine examples/engine.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o fern examples/fern.f $(LDLIBS)
@@ -47,6 +48,7 @@ nomixer:
 
 clean:
 	if [ -e $(TARGET) ]; then rm $(TARGET); fi
+	if [ -e archi ]; then rm archi; fi
 	if [ -e bship ]; then rm bship; fi
 	if [ -e engine ]; then rm engine; fi
 	if [ -e fern ]; then rm fern; fi

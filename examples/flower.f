@@ -6,7 +6,7 @@ C     DRAWS SUNFLOWER FRACTAL:
 C
 C       https://rosettacode.org/wiki/Sunflower_fractal
 C
-C     DATE..: 2023-00-16
+C     DATE..: 2023-06-16
 C     AUTHOR: PHILIPP ENGEL
 C
 C     ******************************************************************
@@ -15,7 +15,6 @@ C     ******************************************************************
       EXTERNAL SUNFLO
       INTEGER  GKEY
 
-      INCLUDE 'const.fi'
       INCLUDE 'event.fi'
       INCLUDE 'key.fi'
       INTEGER IDELAY

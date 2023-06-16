@@ -161,24 +161,30 @@ void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih)
  */
 void gcirc_(int *ix, int *iy, int *ir)
 {
-    int d, i, j, sx, sy, x, y;
+    int d = 3 - (*ir * 2);
+    int i = 10 - (*ir * 4);
+    int j = 6;
+    int x = 0;
+    int y = *ir - 1;
 
-    x = 0;
-    y = *ir - 1;
-    d = 3 - (2 * (*ir));
-    i = 10 - (4 * (*ir));
-    j = 6;
+    Uint32 *scratch = (Uint32 *) layers[layer]->pixels;
+
+    if (*ir <= 0) return;
 
     glock_();
 
     while (x <= y)
     {
-        sx = *ix + x;
-        sy = *iy + y;
+        scratch[((*iy + y) * layers[layer]->w) + (*ix + x)] = color;
+        scratch[((*iy - y) * layers[layer]->w) + (*ix + x)] = color;
+        scratch[((*iy + y) * layers[layer]->w) + (*ix - x)] = color;
+        scratch[((*iy - y) * layers[layer]->w) + (*ix - x)] = color;
+        scratch[((*iy + x) * layers[layer]->w) + (*ix + y)] = color;
+        scratch[((*iy - x) * layers[layer]->w) + (*ix + y)] = color;
+        scratch[((*iy + x) * layers[layer]->w) + (*ix - y)] = color;
+        scratch[((*iy - x) * layers[layer]->w) + (*ix - y)] = color;
 
-        gpixel_(&sx, &sy);
-
-        if (d >=  0)
+        if (d >= 0)
         {
             d += i;
             i += 8;

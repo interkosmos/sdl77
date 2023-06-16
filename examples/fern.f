@@ -61,8 +61,6 @@ C     ******************************************************************
 C
 C     CALCULATES FRACTAL.
 C
-      REAL RAND
-
       INTEGER N
       REAL    XY(N), YY(N)
 

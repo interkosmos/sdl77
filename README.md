@@ -151,6 +151,7 @@ $ ./demo
 
 Some example programs can be found in directory `examples/`:
 
+* **archi** draws the Archimedean spiral.
 * **bship** draws the burning ship fractal.
 * **engine** renders a 2.5-D environment through ray-casting.
 * **fern** draws a Barnsley fern fractal.

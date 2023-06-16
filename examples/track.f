@@ -15,7 +15,6 @@ C     ******************************************************************
       EXTERNAL MCHAN, MCLOSE, MHALT, MLOAD, MLOADW, MPLAY
       INTEGER  GKEY
 
-      INCLUDE 'const.fi'
       INCLUDE 'event.fi'
       INCLUDE 'key.fi'
       INTEGER IDELAY
