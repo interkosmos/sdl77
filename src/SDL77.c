@@ -70,6 +70,7 @@ long gtime_(void);
 
 void galloc_(int *);
 void gblit_(int *, int *, int *, int *, int *, int *, int *);
+void gcirc_(int *, int *, int *);
 void gclose_(void);
 void gcolor_(int *, int *, int *);
 void gcolk_(int *, int *, int *);
@@ -153,6 +154,47 @@ void gblit_(int *i, int *ix1, int *iy1, int *ix2, int *iy2, int *iw, int *ih)
     SDL_Rect src = { (Sint16) *ix1, (Sint16) *iy1, (Uint16) *iw, (Uint16) *ih };
     SDL_Rect dst = { (Sint16) *ix2, (Sint16) *iy2, (Uint16) *iw, (Uint16) *ih };
     SDL_BlitSurface(layers[*i], &src, layers[layer], &dst);
+}
+
+/*
+ * Draw circle in current colour to selected layer.
+ */
+void gcirc_(int *ix, int *iy, int *ir)
+{
+    int d, i, j, sx, sy, x, y;
+
+    x = 0;
+    y = *ir - 1;
+    d = 3 - (2 * (*ir));
+    i = 10 - (4 * (*ir));
+    j = 6;
+
+    glock_();
+
+    while (x <= y)
+    {
+        sx = *ix + x;
+        sy = *iy + y;
+
+        gpixel_(&sx, &sy);
+
+        if (d >=  0)
+        {
+            d += i;
+            i += 8;
+            y -= 1;
+        }
+        else
+        {
+            d += j;
+            i += 4;
+        }
+
+        j += 4;
+        x += 1;
+    }
+
+    gulock_();
 }
 
 /*

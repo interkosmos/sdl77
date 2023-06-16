@@ -24,6 +24,7 @@ examples: $(TARGET)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o fern examples/fern.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o fire examples/fire.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o fizzle examples/fizzle.f $(LDLIBS)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o flower examples/flower.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o font examples/font.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o mode7 examples/mode7.f $(LDLIBS)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o root3 examples/root3.f $(LDLIBS)
@@ -51,6 +52,7 @@ clean:
 	if [ -e fern ]; then rm fern; fi
 	if [ -e fire ]; then rm fire; fi
 	if [ -e fizzle ]; then rm fizzle; fi
+	if [ -e flower ]; then rm flower; fi
 	if [ -e font ]; then rm font; fi
 	if [ -e mode7 ]; then rm mode7; fi
 	if [ -e root3 ]; then rm root3; fi

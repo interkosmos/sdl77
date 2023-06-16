@@ -6,28 +6,24 @@
 Returns `1` if key of given key code has been pressed, else `0`.
 
 ### INTEGER\*8 FUNCTION GTICKS()
-Returns number of milliseconds since the SDL library initialisation as 64-bit
+Returns number of milliseconds since the SDL library initialisation as 8-byte
 integer.
 
 ### INTEGER\*8 FUNCTION GTIME()
-Returns UNIX timestamp as 64-bit integer.
+Returns UNIX timestamp as 8-byte integer.
 
 ## Subroutines
 
 ### SUBROUTINE GALLOC(ISTAT)
-Returns allocation status of given layer. The status is `1` if the layer is
+Returns allocation status of current layer. The status is `1` if the layer is
 allocated, else `0`.
 
 ### SUBROUTINE GBLIT(I, IX1, IY1, IX2, IY2, IW, IH)
 Blits rectangle copied from source layer `I` to target layer selected with
 `GLAYER()`.
 
-### SUBROUTINE GMBUT(IBUT1, IBUT2, IBUT3)
-Returns mouse button clicks (left, middle, right). On click, the button state
-is set to `1`.
-
-### SUBROUTINE GMOUSE(IXREL, IXREL, IX, IY)
-Returns relative mouse motion and absolute mouse position.
+### SUBROUTINE GCIRC(IX, IY, IR)
+Draws circle in current colour at `IX`, `IY`, and of radius `IR`.
 
 ### SUBROUTINE GCLOSE()
 Cleans up and quits SDL 1.2.
@@ -91,8 +87,12 @@ to `0` if the image has been loaded successfully.
 ### SUBROUTINE GLOCK()
 Locks current layer for direct pixel manipulation.
 
-### SUBROUTINE GMOUSE(IXREL, IYREL)
-Returns relative mouse motion as 8-byte integer.
+### SUBROUTINE GMBUT(IBUT1, IBUT2, IBUT3)
+Returns mouse button clicks (left, middle, right). On click, the button state
+is set to `1`.
+
+### SUBROUTINE GMOUSE(IXREL, IXREL, IX, IY)
+Returns relative mouse motion and absolute mouse position as 8-byte integer.
 
 ### SUBROUTINE GOPEN(IW, IH, TITLE, ISTAT)
 Opens the SDL 1.2 window. Only a single window can be opened at a time. `TITLE`

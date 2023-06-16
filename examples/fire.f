@@ -35,7 +35,7 @@ C
 C
 C     OPEN SDL 1.2 WINDOW.
 C
-      CALL SRAND(INT(GTIME() - (2**30 - 1)))
+      CALL SRAND(ABS(INT(GTIME())))
       CALL GOPEN(IW, IH, 'FORTRAN' // ACHAR(0), ISTAT)
       IF (ISTAT .NE. 0) STOP
       CALL INFO()

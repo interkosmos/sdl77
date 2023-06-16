@@ -133,7 +133,7 @@ To compile without SDL_image and SDL_mixer, run:
 
 ```
 $ make nolibs
-$ gfortran -o demo demo.f libSDL 77.a -lSDL
+$ gfortran -o demo demo.f libSDL77.a -lSDL
 $ ./demo
 ```
 
@@ -156,6 +156,7 @@ Some example programs can be found in directory `examples/`:
 * **fern** draws a Barnsley fern fractal.
 * **fire** renders the DOOM fire effect.
 * **fizzle** demonstrates a fizzle-fade effect based on Fisher-Yates shuffle.
+* **flower** draws a sunflower fractal.
 * **font** prints text with a bitmap font.
 * **mode7** shows affine transformation for perspective correction.
 * **root3** is another fractal demo.
