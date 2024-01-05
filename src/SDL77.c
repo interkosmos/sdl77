@@ -166,6 +166,7 @@ void gcirc_(int *ix, int *iy, int *ir)
     int j = 6;
     int x = 0;
     int y = *ir - 1;
+    int m = layers[layer]->w * layers[layer]->h;
 
     Uint32 *scratch = (Uint32 *) layers[layer]->pixels;
 
@@ -175,14 +176,14 @@ void gcirc_(int *ix, int *iy, int *ir)
 
     while (x <= y)
     {
-        scratch[((*iy + y) * layers[layer]->w) + (*ix + x)] = color;
-        scratch[((*iy - y) * layers[layer]->w) + (*ix + x)] = color;
-        scratch[((*iy + y) * layers[layer]->w) + (*ix - x)] = color;
-        scratch[((*iy - y) * layers[layer]->w) + (*ix - x)] = color;
-        scratch[((*iy + x) * layers[layer]->w) + (*ix + y)] = color;
-        scratch[((*iy - x) * layers[layer]->w) + (*ix + y)] = color;
-        scratch[((*iy + x) * layers[layer]->w) + (*ix - y)] = color;
-        scratch[((*iy - x) * layers[layer]->w) + (*ix - y)] = color;
+        scratch[(((*iy + y) * layers[layer]->w) + (*ix + x)) % m] = color;
+        scratch[(((*iy - y) * layers[layer]->w) + (*ix + x)) % m] = color;
+        scratch[(((*iy + y) * layers[layer]->w) + (*ix - x)) % m] = color;
+        scratch[(((*iy - y) * layers[layer]->w) + (*ix - x)) % m] = color;
+        scratch[(((*iy + x) * layers[layer]->w) + (*ix + y)) % m] = color;
+        scratch[(((*iy - x) * layers[layer]->w) + (*ix + y)) % m] = color;
+        scratch[(((*iy + x) * layers[layer]->w) + (*ix - y)) % m] = color;
+        scratch[(((*iy - x) * layers[layer]->w) + (*ix - y)) % m] = color;
 
         if (d >= 0)
         {
